@@ -44,7 +44,7 @@ THIRD_PARTY_APPS = []
 PROJECT_APPS = [
     "communities.apps.CommunitiesConfig",
     "core.apps.CoreConfig",
-    "partmarket.apps.PartmarketsConfig",
+    "partmarkets.apps.PartmarketsConfig",
     "users.apps.UsersConfig",
     "virtualpools.apps.VirtualpoolsConfig",
 ]
@@ -135,4 +135,4 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "users.User"
