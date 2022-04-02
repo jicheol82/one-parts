@@ -16,6 +16,11 @@ class PhotoAdmin(admin.ModelAdmin):
     get_thumbnail.short_description = "Thumbnail"
 
 
+class PhotoInline(admin.TabularInline):
+
+    model = Photo
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     search_fields = (
@@ -37,3 +42,4 @@ class ProductAdmin(admin.ModelAdmin):
         "price",
         "category",
     )
+    inlines = (PhotoInline,)

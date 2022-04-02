@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import *
 
 # 설비 Admin
-@admin.register(EuipGroup)
+@admin.register(EquipGroup)
 class EuipGroupAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     list_display = ("name", "count_equips")
@@ -17,8 +17,9 @@ class EuipGroupAdmin(admin.ModelAdmin):
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
     search_fields = ("name",)
-    list_display = ("name", "euipment_group")
-    list_filter = ("euipment_group",)
+    list_display = ("name", "equipment_group")
+    list_filter = ("equipment_group",)
+    raw_id_fields = ("equipment_group",)
 
 
 # 회사 Admin
@@ -96,6 +97,8 @@ class CustomUserAdmin(UserAdmin):
         # "email_secret",
         # "login_method",
     )
+
+    raw_id_fields = ("my_company",)
 
     def count_equips(self, obj):
         return obj.interesting_equips.count()

@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from core.models import TimeStampedModel
-from users.models import User, EuipGroup
+from users.models import User, EquipGroup
 from virtualpools.models import OfficialMakerName
 
 # Part Market 등록 상품
@@ -28,7 +28,7 @@ class Product(TimeStampedModel):
     contact_person = models.CharField(max_length=100, blank=True)
     contact_number = models.CharField(max_length=100, blank=True)
     price = models.IntegerField(validators=[MinValueValidator(1)])
-    category = models.ForeignKey(EuipGroup, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(EquipGroup, on_delete=models.SET_NULL, null=True)
 
     def seller_name(self):
         return self.seller.nickname

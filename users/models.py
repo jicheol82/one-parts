@@ -4,7 +4,7 @@ from core.models import TimeStampedModel
 
 # 설비관련 모델 생성하기
 class AbstractItem(TimeStampedModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         abstract = True
@@ -13,13 +13,15 @@ class AbstractItem(TimeStampedModel):
         return self.name
 
 
-class EuipGroup(AbstractItem):
+class EquipGroup(AbstractItem):
     class Meta:
         verbose_name_plural = "Equipment Groups"
 
 
 class Equipment(AbstractItem):
-    euipment_group = models.ForeignKey(EuipGroup, on_delete=models.SET_NULL, null=True)
+    equipment_group = models.ForeignKey(
+        EquipGroup, on_delete=models.SET_NULL, null=True
+    )
 
 
 # 회사관련 모델 생성하기
