@@ -1,4 +1,3 @@
-from operator import truediv
 from django.db import models
 from django.core.validators import MinValueValidator
 from core.models import TimeStampedModel
@@ -6,6 +5,17 @@ from users.models import User, EuipGroup
 from virtualpools.models import OfficialMakerName
 
 # Part Market 등록 상품
+class Photo(TimeStampedModel):
+
+    """Photo Model Definition"""
+
+    file = models.ImageField(upload_to="product_photos")
+    product = models.ForeignKey("Product", on_delete=models.SET_DEFAULT, default=1)
+
+    def __str__(self):
+        return self.product.product_name
+
+
 class Product(TimeStampedModel):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=140)
