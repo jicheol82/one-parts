@@ -4,7 +4,8 @@ from .models import *
 
 # 설비 Admin
 @admin.register(EuipGroup)
-class Category1Admin(admin.ModelAdmin):
+class EuipGroupAdmin(admin.ModelAdmin):
+    search_fields = ("name",)
     list_display = ("name", "count_equips")
 
     def count_equips(self, obj):
@@ -14,24 +15,16 @@ class Category1Admin(admin.ModelAdmin):
 
 
 @admin.register(Equipment)
-class Category2Admin(admin.ModelAdmin):
+class EquipmentAdmin(admin.ModelAdmin):
+    search_fields = ("name",)
     list_display = ("name", "euipment_group")
     list_filter = ("euipment_group",)
 
 
 # 회사 Admin
-
-
-@admin.register(Domain)
+@admin.register(Domain, Branch)
 class DomainAdmin(admin.ModelAdmin):
     """Domain Admin Definition"""
-
-    list_display = ("name",)
-
-
-@admin.register(Branch)
-class BranchAdmin(admin.ModelAdmin):
-    """Branch Admin Definition"""
 
     list_display = ("name",)
 

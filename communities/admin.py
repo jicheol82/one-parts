@@ -1,3 +1,12 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+
+@admin.register(Reply)
+class ReplyAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Feed)
+class FeedAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "writer", "count_reply", "created", "updated")

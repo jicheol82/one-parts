@@ -20,5 +20,10 @@ class Product(TimeStampedModel):
     price = models.IntegerField(validators=[MinValueValidator(1)])
     category = models.ForeignKey(EuipGroup, on_delete=models.SET_NULL, null=True)
 
+    def seller_name(self):
+        return self.seller.nickname
+
+    seller_name.short_description = "Seller"
+
     def __str__(self):
         return f"'{self.maker}' / '{self.product_name}' / '{self.model_name}'"

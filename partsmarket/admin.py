@@ -17,11 +17,9 @@ class ProductAdmin(admin.ModelAdmin):
     )
     list_display = (
         "__str__",
-        "seller",
+        "seller_name",
         "num_product",
         "new_part",
-        "contact_person",
-        "contact_number",
         "price",
         "category",
     )
