@@ -87,6 +87,7 @@ class CustomUserAdmin(UserAdmin):
         "nickname",
         "count_equips",
         "my_company",
+        "my_branch",
         "company_email",
         "contact_number",
         "is_active",
@@ -98,7 +99,7 @@ class CustomUserAdmin(UserAdmin):
         # "login_method",
     )
 
-    raw_id_fields = ("my_company",)
+    raw_id_fields = ("my_company", "my_branch")
 
     def count_equips(self, obj):
         return obj.interesting_equips.count()

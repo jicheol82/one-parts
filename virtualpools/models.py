@@ -5,7 +5,7 @@ from users.models import User
 
 
 class AbstractMaker(TimeStampedModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         abstract = True
@@ -15,16 +15,18 @@ class AbstractMaker(TimeStampedModel):
 
 
 # 회사 이름 집합 ex) (mhi, 미쯔비시중공업, mhps) -> MPW
-class OtherMakerName(AbstractMaker):
-    """SimilarName Model Definition"""
+class OfficialMakerName(AbstractMaker):
+    """Maker Model Definition"""
 
     pass
 
 
-class OfficialMakerName(AbstractMaker):
-    """Maker Model Definition"""
+class OtherMakerName(AbstractMaker):
+    """SimilarName Model Definition"""
 
-    other_names = models.ManyToManyField(OtherMakerName, blank=True)
+    official_name = models.ForeignKey(
+        OfficialMakerName, on_delete=models.SET_NULL, null=True
+    )
 
 
 # Virtual Pool 등록 상품
@@ -35,7 +37,11 @@ class Stock(TimeStampedModel):
     spec = models.CharField(max_length=180, blank=True)
     # 재고품 총 갯수
     def total_stock(self):
-        return self.stockinfo_set.count()
+        stockinfo_objs = self.stockinfo_set.all()
+        total = 0
+        for i in stockinfo_objs:
+            total += i.num_stock
+        return total
 
     def __str__(self):
         return f"'{self.maker}' / '{self.stock_name}' / '{self.model_name}'"

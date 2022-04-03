@@ -47,7 +47,7 @@ THIRD_PARTY_APPS = [
 PROJECT_APPS = [
     "communities.apps.CommunitiesConfig",
     "core.apps.CoreConfig",
-    "partsmarket.apps.PartsmarketConfig",
+    "partsmarkets.apps.PartsmarketsConfig",
     "users.apps.UsersConfig",
     "virtualpools.apps.VirtualpoolsConfig",
 ]

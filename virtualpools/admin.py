@@ -9,7 +9,7 @@ class OtherMakerNameAdmin(admin.ModelAdmin):
 
 @admin.register(OfficialMakerName)
 class OfficialMakerNameAdmin(admin.ModelAdmin):
-    filter_horizontal = ("other_names",)
+    pass
 
 
 @admin.register(Stock)

@@ -19,7 +19,6 @@ class Command(BaseCommand):
         seeder = Seed.seeder()
         # 생성되어 있는 모든 Domain, Branch 객체를 가져온다-좋은 방법은 아님
         domains = Domain.objects.all()
-        print("domains : ", domains)
         branches = Branch.objects.all()
         seeder.add_entity(
             Company,

@@ -46,4 +46,33 @@ class User(AbstractUser):
     contact_number = models.CharField(max_length=20, blank=True)
     company_email = models.EmailField(blank=True)
     my_company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True)
+    my_branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True)
     interesting_equips = models.ManyToManyField(Equipment, blank=True)
+
+    def save_domain(self):
+        email = self.company_email
+        domain = "@" + email.split("@")[1]
+        try:
+            Domain.objects.get(name=domain)
+            return f"{domain} is alreay exist"
+        except Domain.DoesNotExist:
+            Domain.objects.create(name=domain)
+            return f"{domain} is registered!"
+
+    def save_branch(self):
+        branch = self.my_branch
+        try:
+            Branch.objects.get(name=branch)
+            return f"{branch} is alreay exist"
+        except Branch.DoesNotExist:
+            Branch.objects.create(name=branch)
+            return f"{branch} is registered!"
+
+    def save_company(self):
+        company = self.my_company
+        try:
+            Company.objects.get(name=company)
+            return f"{company} is alreay exist"
+        except Company.DoesNotExist:
+            Company.objects.create(name=company)
+            return f"{company} is registered!"
