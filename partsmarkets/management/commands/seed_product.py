@@ -2,7 +2,7 @@ import random
 from django.core.management.base import BaseCommand
 from django.contrib.admin.utils import flatten
 from django_seed import Seed
-from partsmarket.models import Product, Photo
+from partsmarkets.models import Product, Photo
 from users.models import User, EquipGroup
 from virtualpools.models import OfficialMakerName
 
@@ -32,6 +32,7 @@ class Command(BaseCommand):
                 # MtoM 필드는 여기서 생성 불가
                 "seller": lambda x: random.choice(sellers),
                 "maker": lambda x: random.choice(makers),
+                "num_product": lambda x: random.randint(0, 100),
                 "contact_person": lambda x: seeder.faker.name(),
                 "contact_number": lambda x: seeder.faker.phone_number(),
                 "category": lambda x: random.choice(categories),

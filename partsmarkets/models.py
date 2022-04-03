@@ -13,10 +13,10 @@ class Photo(TimeStampedModel):
     """Photo Model Definition"""
 
     file = models.ImageField(upload_to="product_photos")
-    product = models.ForeignKey("Product", on_delete=models.SET_DEFAULT, default=1)
+    product = models.ForeignKey("Product", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.product.product_name
+        return str(self.file)
 
 
 class Product(TimeStampedModel):
