@@ -56,6 +56,7 @@ class StockInfo(TimeStampedModel):
     new_part = models.BooleanField()
     contact_person = models.CharField(max_length=100, blank=True)
     contact_number = models.CharField(max_length=100, blank=True)
+
     # __str__은 string을 return해야 한다
     def __str__(self):
         return str(self.my_stock)

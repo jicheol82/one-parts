@@ -3,4 +3,4 @@ from core import views
 
 app_name = "core"
 
-urlpatterns = [path("", views.homeview, name="home")]
+urlpatterns = [path("", views.home, name="home")]
