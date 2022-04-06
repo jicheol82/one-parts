@@ -3,4 +3,6 @@ from virtualpools import views
 
 app_name = "virtualpools"
 
-urlpatterns = [path("", views.VirtualPoolView.as_view(), name="virtualpools")]
+urlpatterns = [
+    path("", views.VirtualPoolView.as_view(), name="virtualpool"),
+]
