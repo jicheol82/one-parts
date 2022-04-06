@@ -15,22 +15,11 @@ class VirtualPoolView(ListView):
         range = self.request.GET.get("range")
         search_kwarg = self.request.GET.get("search_kwarg")
         if search_kwarg is not None:
-            if search_kwarg is not None:
-                if range == "stock_name":
-                    queryset = queryset.filter(
-                        my_stock__stock_name__contains=search_kwarg
-                    )
-                elif range == "maker":
-                    queryset = queryset.filter(
-                        my_stock__maker__name__contains=search_kwarg
-                    )
-                elif range == "model_name":
-                    queryset = queryset.filter(
-                        my_stock__model_name__contains=search_kwarg
-                    )
-                else:
-                    # 무언가 처리 해줘야 할 듯...
-                    print("dont touch keys")
+            queryset = queryset.filter(
+                Q(my_stock__stock_name__contains=search_kwarg)
+                | Q(my_stock__maker__name__contains=search_kwarg)
+                | Q(my_stock__model_name__contains=search_kwarg)
+            )
         return queryset
 
 

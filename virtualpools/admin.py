@@ -39,3 +39,4 @@ class StockInfoAdmin(admin.ModelAdmin):
         "contact_person",
         "contact_number",
     )
+    raw_id_fields = ("my_stock", "owner")

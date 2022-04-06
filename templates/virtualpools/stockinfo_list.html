@@ -6,11 +6,6 @@ home
 
 {% block search-form %}
 <form action="{% url "virtualpools:virtualpool"%}" method="get">
-    <select name="range" id="search">
-        <option value="stock_name">재고명</option>
-        <option value="maker">제작사</option>
-        <option value="model_name">모델명</option>
-    </select>
     <input type="text" name="search_kwarg" id="search">
     <button>submit</button>
 </form>
