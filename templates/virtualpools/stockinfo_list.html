@@ -5,7 +5,8 @@ home
 {% endblock page_name %}
 
 {% block search-form %}
-<form action="{% url "virtualpools:virtualpool"%}" method="get">
+<form action="{% url " virtualpools:virtualpool"%}" method="get">
+    <!--검색키워드를 검색입력창에 남기기 위해 input context를 받아사용한다-->
     <input type="text" name="search" id="search" value={{input}}>
     <button>submit</button>
 </form>
@@ -18,6 +19,7 @@ home
 {% endfor %}
 <h6>
     {% if page_obj.has_previous %}
+    <!--pagination을 위해 input context를 받아왔다-->
     <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.previous_page_number}}">Previous</a>
     {% endif %}
 
