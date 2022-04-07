@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block page_name %}
+Virtual Pool
+{% endblock page_name %}
+
+{% block search-form %}
+<form action="{% url 'partsmarkets:partsmarket'%}" method="get">
+    <!--검색키워드를 검색입력창에 남기기 위해 input context를 받아사용한다-->
+    <input type="text" name="search" id="search" placeholder="Search in Parts Market" value={{input}}>
+    <button>submit</button>
+</form>
+{% endblock search-form %}
+
+{% block content %}
+<div>
+    <h1>상품명 / {{product.product_name}}</h1>
+    <h3>판매자 / {{product.seller}}</h3>
+</div>
+{% endblock content %}

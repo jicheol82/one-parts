@@ -5,9 +5,9 @@ home
 {% endblock page_name %}
 
 {% block search-form %}
-<form action="{% url " virtualpools:virtualpool"%}" method="get">
+<form action="{% url 'virtualpools:virtualpool'%}" method="get">
     <!--검색키워드를 검색입력창에 남기기 위해 input context를 받아사용한다-->
-    <input type="text" name="search" id="search" value={{input}}>
+    <input type="text" name="search" id="search" placeholder="Search in Virtual Pool" value={{input}}>
     <button>submit</button>
 </form>
 {% endblock search-form %}
@@ -15,7 +15,12 @@ home
 {% block content %}
 
 {% for info in object_list %}
-<h1>{{info.owner}} / {{info.my_stock.stock_name}} / {{info.my_stock.total_stock}}</h1>
+<h1>
+    <a href="{% url 'virtualpools:detail' info.pk%}">
+        {{info.owner}} / {{info.my_stock.stock_name}} /
+        {{info.my_stock.total_stock}}
+    </a>
+</h1>
 {% endfor %}
 <h6>
     {% if page_obj.has_previous %}

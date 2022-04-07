@@ -1,34 +1,34 @@
 {% extends 'base.html' %}
 
 {% block page_name %}
-home
+Parts Market
 {% endblock page_name %}
 
 {% block search-form %}
-<form action="#" method="get">
-    <select name="range" id="search">
-        <option value="product_name">상품명</option>
-        <option value="maker">제작사</option>
-        <option value="model_name">모델명</option>
-    </select>
-    <input type="text" name="search_kwarg" id="search">
+<form action="{% url 'partsmarkets:partsmarket'%}" method="get">
+    <!--검색키워드를 검색입력창에 남기기 위해 input context를 받아사용한다-->
+    <input type="text" name="search" id="search" placeholder="Search in Parts Market" value={{input}}>
     <button>submit</button>
 </form>
 {% endblock search-form %}
 {% block content %}
 
 {% for product in object_list %}
-<h1>{{product.product_name}} / {{product.maker}}</h1>
+<h1>
+    <a href="{% url 'partsmarkets:detail' product.pk%}">
+        {{product.product_name}} / {{product.maker}}
+    </a>
+</h1>
 {% endfor %}
 <h6>
     {% if page_obj.has_previous %}
-    <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.previous_page_number}}">Previous</a>
     {% endif %}
 
     Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
 
     {% if page_obj.has_next %}
-    <a href="?page={{page_obj.next_page_number}}">Next</a>
+    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.next_page_number}}">Next</a>
     {% endif %}
 
 
