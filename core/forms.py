@@ -1,3 +1,5 @@
+from cProfile import label
+from enum import unique
 from django import forms
 from users.models import User
 
@@ -22,3 +24,42 @@ class LoginForm(forms.Form):
                 self.add_error("password", forms.ValidationError("Password is wrong"))
         except User.DoesNotExist:
             self.add_error("email", forms.ValidationError("User does not exist"))
+
+
+class SignUpForm(forms.Form):
+    username = forms.EmailField()
+    nickname = forms.CharField(max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput)
+    password1 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        try:
+            User.objects.get(username=username)
+            raise forms.ValidationError("User already exists with that email")
+        except User.DoesNotExist:
+            return username
+
+    def clean_nickname(self):
+        nickname = self.cleaned_data.get("nickname")
+        try:
+            User.objects.get(nickname=nickname)
+            raise forms.ValidationError("Nick name already exists")
+            # self.add_error("nickname", "nickname does already exist")
+        except User.DoesNotExist:
+            return nickname
+
+    def clean_password1(self):
+        password = self.cleaned_data.get("password")
+        password1 = self.cleaned_data.get("password1")
+        if password == password1:
+            return password
+        else:
+            raise forms.ValidationError("Password confirmation does not match")
+
+    def save(self):
+        username = self.cleaned_data.get("username")
+        nickname = self.cleaned_data.get("nickname")
+        password = self.cleaned_data.get("password")
+        user = User.objects.create_user(username, nickname=nickname, password=password)
+        user.save()

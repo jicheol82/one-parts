@@ -42,7 +42,7 @@ class Company(AbstractItem):
 class User(AbstractUser):
     # username은 15.1에서 form.py에서 save()를 overide 하여 email로 저장한다
     profile_img = models.ImageField(upload_to="profile_img", blank=True)
-    nickname = models.CharField(max_length=20)
+    nickname = models.CharField(max_length=20, unique=True)
     contact_number = models.CharField(max_length=20, blank=True)
     company_email = models.EmailField(blank=True)
     my_company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True)

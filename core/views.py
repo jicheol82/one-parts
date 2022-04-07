@@ -27,3 +27,15 @@ class LoginView(FormView):
 def log_out(request):
     logout(request)
     return redirect(reverse("core:home"))
+
+
+class SignUpView(FormView):
+    form_class = SignUpForm
+    template_name = "home/signup.html"
+    success_url = reverse_lazy("core:home")
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    # initial = {'필드명':"필드값",}
