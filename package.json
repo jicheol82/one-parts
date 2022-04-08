@@ -1,0 +1,22 @@
+{
+    "name": "one-parts",
+    "version": "1.0.0",
+    "description": "with Python, Django, Tailwind and more... 🇰🇷💖🐍",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jicheol82/one-parts.git"
+    },
+    "scripts": {
+        "css": "gulp"
+    },
+    "homepage": "https://github.com/jicheol82/one-parts#readme",
+    "devDependencies": {
+        "autoprefixer": "^9.7.0",
+        "gulp": "^4.0.2",
+        "gulp-csso": "^3.0.1",
+        "gulp-postcss": "^8.0.0",
+        "gulp-sass": "^4.0.2",
+        "node-sass": "^4.13.0",
+        "tailwindcss": "^1.1.3"
+    }
+}
