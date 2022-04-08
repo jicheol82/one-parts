@@ -142,3 +142,12 @@ AUTH_USER_MODEL = "users.User"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+
+# Email Configuration
+
+EMAIL_HOST = "smtp.daum.net"
+EMAIL_PORT = "465"
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = os.environ.get("DAUM_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("DAUM_PASSWORD")
+EMAIL_FROM = "cs@one-parts.co.kr"

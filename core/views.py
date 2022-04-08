@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView
 from core.forms import *
+from users.models import User
 
 
 def home(request):
@@ -36,6 +37,29 @@ class SignUpView(FormView):
 
     def form_valid(self, form):
         form.save()
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=username, password=password)
+        user.veryfy_email()
         return super().form_valid(form)
 
     # initial = {'필드명':"필드값",}
+
+
+def complete_verification(request, opt, key):
+    try:
+        if opt == "user":
+            user = User.objects.get(user_secret=key)
+            user.user_verified = True
+            user.user_secret = ""
+        elif opt == "company":
+            user = User.objects.get(company_secret=key)
+            user.company_verified = True
+            user.company_secret = ""
+        else:
+            print("abnormal access")
+    except User.DoesNotExist:
+        # to do : error message
+        pass
+    user.save()
+    return redirect(reverse("core:home"))
