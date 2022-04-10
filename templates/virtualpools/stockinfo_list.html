@@ -1,36 +1,52 @@
 {% extends 'base.html' %}
 
 {% block page_name %}
-home
+Virtual Pool
 {% endblock page_name %}
 
 {% block search-form %}
-{% include 'virtualpools/stockinfo_search.html' %}
+{% include 'partials/search_form.html' with menu="Virtual Pool" %}
 {% endblock search-form %}
 
 {% block content %}
 
-{% for info in object_list %}
-<h1>
-    <a href="{% url 'virtualpools:detail' info.pk%}">
-        {{info.owner}} / {{info.my_stock.stock_name}} /
-        {{info.my_stock.total_stock}}
-    </a>
-</h1>
-{% endfor %}
-<h6>
-    {% if page_obj.has_previous %}
-    <!--pagination을 위해 input context를 받아왔다-->
-    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.previous_page_number}}">Previous</a>
-    {% endif %}
+<table class="container">
+    <thead>
+        <tr class="w-full border-b">
+            <th class="w-1/12">
+                <p>STOCK</p>
+            </th>
+            <th class="w-4/12">
+                <p>NAME</p>
+            </th>
+            <th class="w-4/12">
+                <p>MODEL</p>
+            </th>
+            <th class="w-3/12">
+                <p>MANUFAC.</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for info in object_list %}
+        <tr class="cursor-pointer border-b" onClick="location.href='/virtualpool/{{info.pk}}'">
+            <td class="text-center">
+                <p>{{info.num_stock}} / {{info.my_stock.total_stock}}</p>
+            </td>
+            <td class="px-1 py-1">
+                <p>{{info.my_stock.stock_name}}</p>
+            </td>
+            <td class="px-1 py-1">
+                <p>{{info.my_stock.model_name}}</p>
+            </td>
+            <td class="text-center">
+                <p>{{info.my_stock.maker}}</p>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-    Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
-
-    {% if page_obj.has_next %}
-    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.next_page_number}}">Next</a>
-    {% endif %}
-
-
-</h6>
+{% include 'partials/pagination.html' with page_obj=page_obj %}
 
 {% endblock content %}

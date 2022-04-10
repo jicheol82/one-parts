@@ -6,9 +6,23 @@ Sign up
 
 
 {% block content %}
-<form action="{%url 'core:signup'%}" method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>Sign Up</button>
-</form>
+<div class="input md:w-2/5 mx-auto my-32 text-center border border-gray-500 p-4">
+    <form method="POST" action="{%url 'core:signup'%}">
+        {% csrf_token %}
+
+        {% if form.non_field_erros %}
+            {% for error in form.non_field_errors%}
+                <span class="text-red-700 font-medium text-sm">{{error}}</span>
+            {% endfor %}
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="input">
+                {{field}}
+            </div>
+        {% endfor %}
+            
+        <button class="btn bg-blue-500">Sign Up</button>
+    </form>
+</div>
 {% endblock content %}

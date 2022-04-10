@@ -5,8 +5,9 @@ Parts Market
 {% endblock page_name %}
 
 {% block search-form %}
-{% include 'partsmarkets/product_search.html' %}
+{% include 'partials/search_form.html' with menu="Parts Market"%}
 {% endblock search-form %}
+
 {% block content %}
 <div class="flex flex-wrap">
     {% for product in object_list %}
@@ -14,18 +15,6 @@ Parts Market
     {% endfor %}
 </div>
 
-<div class="flex items-center justify-center mx-auto container">
-    {% if page_obj.has_previous %}
-    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.previous_page_number}}" class="text-red-700">
-        <i class="fas fa-arrow-left fa-lg"></i>
-    </a>
-    {% endif %}
-    <span class="mx-3 font-medium text-lg">{{page_obj.number}} of {{page_obj.paginator.num_pages}}</span>
-    {% if page_obj.has_next %}
-    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.next_page_number}}" class="text-red-700">
-        <i class="fas fa-arrow-right fa-lg"></i>
-    </a>
-    {% endif %}
-</div>
+{% include 'partials/pagination.html' with page_obj=page_obj %}
 
 {% endblock content %}

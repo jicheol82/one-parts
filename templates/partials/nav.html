@@ -1,7 +1,7 @@
 {% load static%}
 <div class="flex items-center justify-between h-full">
 
-    <a href="/"><img class="h-8" src="{% static 'img/logo.png' %}"></a>
+    <a href="/" class="mr-4"><img class="w-20" src="{% static 'img/logo.png' %}"></a>
     <ul class="flex h-full">
         <li class="nav_link"><a href="{%url 'virtualpools:virtualpool'%}">Virtual Pool</a></li>
         <li class="nav_link"><a href="{%url 'partsmarkets:partsmarket'%}">Parts Market</a></li>

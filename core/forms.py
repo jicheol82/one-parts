@@ -5,8 +5,10 @@ from users.models import User
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+    )
 
     def clean(self):
         # login.html의 form에서 입력된 값 가져오기
@@ -27,10 +29,29 @@ class LoginForm(forms.Form):
 
 
 class SignUpForm(forms.Form):
-    username = forms.EmailField()
-    nickname = forms.CharField(max_length=50)
-    password = forms.CharField(widget=forms.PasswordInput)
-    password1 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    """
+    # class Meta는 UserCreationForm외에도 사용가능하다
+    class Meta:
+        model = models.User
+        fields = ("first_name", "last_name", "email")
+         widgets = {
+            "first_name": forms.TextInput(attrs={"placeholder": "First Name"}),
+            "last_name": forms.TextInput(attrs={"placeholder": "Last Name"}),
+            "email": forms.EmailInput(attrs={"placeholder": "Email Name"}),
+        }
+    """
+
+    username = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+    nickname = forms.CharField(
+        max_length=50, widget=forms.TextInput(attrs={"placeholder": "Nickname"})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password"}),
+        # label="Confirm Password",
+    )
 
     def clean_username(self):
         username = self.cleaned_data.get("username")

@@ -6,9 +6,12 @@ Log in
 
 
 {% block content %}
-<form action="{%url 'core:login'%}" method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>log in</button>
-</form>
+<div class="md:w-2/5 mx-auto my-32 text-center border border-gray-500 p-4">
+    <form method="POST" action="{%url 'core:login'%}">
+        {% csrf_token %}
+        {{form.email}}
+        {{form.password}}
+        <button class="btn bg-blue-500">Login</button>
+    </form>
+</div>
 {% endblock content %}
