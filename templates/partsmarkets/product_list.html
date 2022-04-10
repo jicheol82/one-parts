@@ -5,33 +5,27 @@ Parts Market
 {% endblock page_name %}
 
 {% block search-form %}
-<form action="{% url 'partsmarkets:partsmarket'%}" method="get">
-    <!--검색키워드를 검색입력창에 남기기 위해 input context를 받아사용한다-->
-    <input type="text" name="search" id="search" placeholder="Search in Parts Market" value={{input}}>
-    <button>submit</button>
-</form>
+{% include 'partsmarkets/product_search.html' %}
 {% endblock search-form %}
 {% block content %}
+<div class="flex flex-wrap">
+    {% for product in object_list %}
+    {% include 'partials/product_card.html' with product=product %}
+    {% endfor %}
+</div>
 
-{% for product in object_list %}
-<h1>
-    <a href="{% url 'partsmarkets:detail' product.pk%}">
-        {{product.product_name}} / {{product.maker}}
-    </a>
-</h1>
-{% endfor %}
-<h6>
+<div class="flex items-center justify-center mx-auto container">
     {% if page_obj.has_previous %}
-    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.previous_page_number}}">Previous</a>
+    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.previous_page_number}}" class="text-red-700">
+        <i class="fas fa-arrow-left fa-lg"></i>
+    </a>
     {% endif %}
-
-    Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
-
+    <span class="mx-3 font-medium text-lg">{{page_obj.number}} of {{page_obj.paginator.num_pages}}</span>
     {% if page_obj.has_next %}
-    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.next_page_number}}">Next</a>
+    <a href="?{%if input%}search={{input}}&{%endif%}page={{page_obj.next_page_number}}" class="text-red-700">
+        <i class="fas fa-arrow-right fa-lg"></i>
+    </a>
     {% endif %}
-
-
-</h6>
+</div>
 
 {% endblock content %}

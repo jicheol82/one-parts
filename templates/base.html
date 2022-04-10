@@ -6,26 +6,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>
         {% block page_name %}{% endblock page_name %} | One-Parts
     </title>
 </head>
 
-<body>
+<body class="container mt-12">
+    <header class="container h-12 pt-2 border-b border-gray-400 fixed top-0 bg-white">
+        {% include "partials/nav.html" %}
+    </header>
+    <div>
+        <div class="flex justify-center">
+            {% block search-form %}
 
-    {% include "partials/nav.html" %}
+            {% endblock search-form %}
+        </div>
 
-    {% block search-form %}
+        <div>
+            {% block content %}
 
-    {% endblock search-form %}
-
-    {% block content %}
-
-    {% endblock content %}
-
-    {% include "partials/footer.html" %}
-
+            {% endblock content %}
+        </div>
+    </div>
+    <div class="">
+        {% include "partials/footer.html" %}
+    </div>
 </body>
 
 </html>

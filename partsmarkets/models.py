@@ -35,5 +35,9 @@ class Product(TimeStampedModel):
 
     seller_name.short_description = "Seller"
 
+    def first_photo(self):
+        (photo,) = self.photo_set.all()[:1]
+        return photo.file.url
+
     def __str__(self):
         return f"'{self.maker}' / '{self.product_name}' / '{self.model_name}'"

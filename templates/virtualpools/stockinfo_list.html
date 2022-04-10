@@ -5,11 +5,7 @@ home
 {% endblock page_name %}
 
 {% block search-form %}
-<form action="{% url 'virtualpools:virtualpool'%}" method="get">
-    <!--검색키워드를 검색입력창에 남기기 위해 input context를 받아사용한다-->
-    <input type="text" name="search" id="search" placeholder="Search in Virtual Pool" value={{input}}>
-    <button>submit</button>
-</form>
+{% include 'virtualpools/stockinfo_search.html' %}
 {% endblock search-form %}
 
 {% block content %}
