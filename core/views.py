@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView
@@ -22,10 +23,12 @@ class LoginView(FormView):
         user = authenticate(self.request, username=email, password=password)
         if user is not None:
             login(self.request, user)
+            messages.success(self.request, f"Welcome back {user.nickname}")
         return super().form_valid(form)
 
 
 def log_out(request):
+    messages.success(request, "See you later")
     logout(request)
     return redirect(reverse("core:home"))
 
