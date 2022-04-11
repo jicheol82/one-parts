@@ -5,16 +5,16 @@ Parts Market
 {% endblock page_name %}
 
 {% block search-form %}
-{% include 'partials/search_form.html' with menu="Parts Market"%}
+{% include 'mixins/search_form.html' with menu="Parts Market"%}
 {% endblock search-form %}
 
 {% block content %}
 <div class="flex flex-wrap">
     {% for product in object_list %}
-    {% include 'partials/product_card.html' with product=product %}
+    {% include 'mixins/product_card.html' with product=product %}
     {% endfor %}
 </div>
 
-{% include 'partials/pagination.html' with page_obj=page_obj %}
+{% include 'mixins/pagination.html' with page_obj=page_obj %}
 
 {% endblock content %}

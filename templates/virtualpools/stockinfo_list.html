@@ -5,7 +5,7 @@ Virtual Pool
 {% endblock page_name %}
 
 {% block search-form %}
-{% include 'partials/search_form.html' with menu="Virtual Pool" %}
+{% include 'mixins/search_form.html' with menu="Virtual Pool" %}
 {% endblock search-form %}
 
 {% block content %}
@@ -47,6 +47,6 @@ Virtual Pool
     </tbody>
 </table>
 
-{% include 'partials/pagination.html' with page_obj=page_obj %}
+{% include 'mixins/pagination.html' with page_obj=page_obj %}
 
 {% endblock content %}
