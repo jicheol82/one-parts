@@ -1,0 +1,7 @@
+{% load static %}
+{% if context_obj.profile_img %}
+    <div class="h-20 w-20 rounded-full bg-cover" style="background-image: url({{user.profile_img.url}})">
+{% else %}
+    <div class="h-20 w-20 rounded-full bg-cover" style="background-image: url('/static/img/user.png')">
+{% endif %}
+</div>

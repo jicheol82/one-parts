@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.urls import reverse
 from core.models import TimeStampedModel
 
 # 설비관련 모델 생성하기
@@ -110,3 +111,6 @@ class User(AbstractUser):
             html_message=html_message,
         )
         self.save()
+
+    def get_absolute_url(self):
+        return reverse("users:profile", kwargs={"pk": self.pk})

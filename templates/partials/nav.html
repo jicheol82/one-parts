@@ -9,6 +9,7 @@
     </ul>
     <ul class="flex w-1/6 h-full justify-end text-sm font-medium">
         {% if user.is_authenticated %}
+        <li class="nav_link"><a href="{{user.get_absolute_url}}">Profile</a></li>
         <li class="nav_link"><a href="{%url 'core:logout'%}">Log out</a></li>
         {% else %}
         <li class="nav_link"><a href="{%url 'core:login'%}">Log in</a></li>
