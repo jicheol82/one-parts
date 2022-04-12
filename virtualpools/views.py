@@ -1,10 +1,12 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.urls import reverse_lazy
+from core.mixins import OnlyForMember
 from . import models
 
 # 내가 등록한 부품만 보이게 하는 것은 수업을 더 듣고 작성한다
 # 로그인/리스트나 reservation을 배워야 할 듯
-class VirtualPoolView(ListView):
+class VirtualPoolView(OnlyForMember, ListView):
     model = models.StockInfo
     paginate_by = 25
     paginate_orphans = 5
@@ -31,7 +33,7 @@ class VirtualPoolView(ListView):
         return context
 
 
-class DetailView(DetailView):
+class DetailView(OnlyForMember, DetailView):
     model = models.StockInfo
 
     def get_context_data(self, **kwargs):

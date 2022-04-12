@@ -1,5 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.urls import reverse_lazy
+from core.mixins import OnlyForMember
 from . import models
 
 
@@ -8,6 +10,7 @@ class PartsMarketView(ListView):
     paginate_by = 16
     paginate_orphans = 12
     ordring = "created"
+
     # 다중쿼리를 이용함으로써 검색필드를 제거함
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -29,5 +32,7 @@ class PartsMarketView(ListView):
         return context
 
 
-class DetailView(DetailView):
+class DetailView(OnlyForMember, DetailView):
     model = models.Product
+
+    login_url = reverse_lazy("core:login")

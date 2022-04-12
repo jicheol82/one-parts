@@ -35,13 +35,20 @@
 }
 
 
-input {
+input,
+select {
     @apply rounded-sm p-3 font-light text-lg w-full text-left border border-gray-600;
 
     &:focus {
         @apply outline-none border-teal-500;
     }
 }
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
 
 form {
     .input {
@@ -75,7 +82,7 @@ form {
 }
 
 .message {
-    animation: messageFadeIn 5s ease-in-out forwards;
+    animation: messageFadeIn 3s ease-in-out forwards;
 
     &.error {
         @apply bg-red-600;

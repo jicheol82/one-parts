@@ -1,9 +1,10 @@
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView
 from core.forms import *
+from core.mixins import OnlyForGuest
 from users.models import User
 
 
@@ -12,10 +13,9 @@ def home(request):
     return render(request, "home/home.html")
 
 
-class LoginView(FormView):
+class LoginView(OnlyForGuest, FormView):
     form_class = LoginForm
     template_name = "home/login.html"
-    success_url = reverse_lazy("core:home")
 
     def form_valid(self, form):
         email = form.cleaned_data.get("email")
@@ -26,6 +26,13 @@ class LoginView(FormView):
             messages.success(self.request, f"Welcome back {user.nickname}")
         return super().form_valid(form)
 
+    def get_success_url(self):
+        next_url = self.request.GET.get("next")
+        if next_url is not None:
+            return next_url
+        else:
+            return reverse("core:home")
+
 
 def log_out(request):
     messages.success(request, "See you later")
@@ -33,7 +40,7 @@ def log_out(request):
     return redirect(reverse("core:home"))
 
 
-class SignUpView(FormView):
+class SignUpView(OnlyForGuest, FormView):
     form_class = SignUpForm
     template_name = "home/signup.html"
     success_url = reverse_lazy("core:home")
