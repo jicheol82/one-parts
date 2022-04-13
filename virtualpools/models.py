@@ -43,6 +43,14 @@ class Stock(TimeStampedModel):
             total += i.num_stock
         return total
 
+    def owner_info(self):
+        stockinfo_objs = self.stockinfo_set.all()
+        owner_list = []
+        for i in stockinfo_objs:
+            owner_list.append(i.owner)
+        print(owner_list)
+        return owner_list
+
     def __str__(self):
         return f"'{self.maker}' / '{self.stock_name}' / '{self.model_name}'"
 

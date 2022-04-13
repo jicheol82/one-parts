@@ -15,25 +15,29 @@ Stock Detail
 
 {% block content %}
 
-<div class="container flex w-1/2 h-75vh">
-    <div class="flex flex-col items-center justify-evenly w-1/3 p-4 font-bold">
+<div class="container flex w-2/3 h-75vh">
+    <div class="flex flex-col items-center justify-start w-1/3 p-4 font-bold">
         <span>Manufacturer</span>
         <span>Product</span>
         <span>Model</span>
         <span>Number of My Stock</span>
         <span>Available Stocks</span>
+        <span>Owner Info</span>
     </div>
-    <div class="flex flex-col justify-evenly w-2/3 p-4 ">
+    <div class="flex flex-col justify-start w-2/3 p-4">
         <span class="truncate">{{stockinfo.my_stock.maker}}</span>
         <span class="truncate">{{stockinfo.my_stock.stock_name}}</span>
         <span class="truncate">{{stockinfo.my_stock.model_name}}</span>
         <span class="truncate">{{stockinfo.num_stock}}</span>
-        <span class="truncate">{{stockinfo.my_stock.total_stock}}</span>
+        <span class="truncate">{{total_stock}}</span>
+        {% for a in owner_info %}
+        <span class="truncate">{{a}}</span>
+        {% endfor %}
+        <!-- <span class="truncate">{{stockinfo.my_stock.total_stock}}</span> 
+        {% for a in stockinfo.my_stock.owner_info %}
+        <span class="truncate">{{a}}</span>
+        {% endfor %}-->
     </div>
 </div>
-
-
-
-
 
 {% endblock content %}

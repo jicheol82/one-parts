@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView
@@ -34,10 +35,14 @@ class LoginView(OnlyForGuest, FormView):
             return reverse("core:home")
 
 
+# @user_passes_test(lambda u: u.is_authenticated, login_url="core:home")
 def log_out(request):
-    messages.success(request, "See you later")
-    logout(request)
-    return redirect(reverse("core:home"))
+    if not request.user.is_authenticated:
+        messages.success(request, "You are already logged out")
+    else:
+        messages.success(request, "See you later")
+        logout(request)
+    return redirect("core:home")
 
 
 class SignUpView(OnlyForGuest, FormView):

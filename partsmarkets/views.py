@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from django.urls import reverse_lazy
-from core.mixins import OnlyForMember
+from core.mixins import OnlyForVerifiedMember
 from . import models
 
 
@@ -23,7 +23,6 @@ class PartsMarketView(ListView):
             )
         return queryset
 
-    # 검색어 창에 검색어를 남기고, 검색결과에 대한 pagination을 위해 context를 추가
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         search = self.request.GET.get("search")
@@ -32,7 +31,8 @@ class PartsMarketView(ListView):
         return context
 
 
-class DetailView(OnlyForMember, DetailView):
+# 회사인증이 완료된 사람만 조회가능
+class DetailView(OnlyForVerifiedMember, DetailView):
     model = models.Product
 
     login_url = reverse_lazy("core:login")

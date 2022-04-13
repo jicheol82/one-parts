@@ -15,3 +15,20 @@ class OnlyForGuest(UserPassesTestMixin):
     def handle_no_permission(self):
         messages.error(self.request, "You've logged in already")
         return redirect("core:home")
+
+
+class OnlyForVerifiedMember(UserPassesTestMixin):
+    def test_func(self):
+        try:
+            self.request.user.company_verified
+            return self.request.user.company_verified
+        except Exception:
+            return False
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            messages.error(self.request, "Please complete company verification.")
+            return redirect("users:profile", self.request.user.pk)
+        else:
+            messages.error(self.request, "Please log in first")
+            return redirect("core:login")

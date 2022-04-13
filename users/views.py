@@ -4,13 +4,14 @@ from django.urls import reverse_lazy
 from core.mixins import OnlyForMember
 from users.models import User
 
-
+# 본인만 가능
 class ProfileView(OnlyForMember, DetailView):
     model = User
     context_object_name = "context_obj"
     login_url = reverse_lazy("core:login")
 
 
+# 본인만 가능
 class UserUpdateProfileView(OnlyForMember, UpdateView):
     model = User
     template_name = "users/update-profile.html"
@@ -29,6 +30,7 @@ class UserUpdateProfileView(OnlyForMember, UpdateView):
         return self.request.user
 
 
+# 본인만 가능
 class UpdatePasswordView(OnlyForMember, PasswordChangeView):
 
     template_name = "users/update-password.html"
