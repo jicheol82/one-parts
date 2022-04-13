@@ -41,7 +41,6 @@ class VirtualPoolDetailView(OnlyForMember, DetailView):
         "num_stock",
         "my_stock.total_stock",
     )
-    labels = ({"num_stock": "test"},)
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context["total_stock"] = models.Stock.total_stock(self.object.my_stock)

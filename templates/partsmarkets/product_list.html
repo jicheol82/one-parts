@@ -5,7 +5,12 @@ Parts Market
 {% endblock page_name %}
 
 {% block search-form %}
-{% include 'mixins/search_form.html' with menu="Parts Market"%}
+<div>
+    <form class="p-3 w-2/5" action="{%url 'partsmarkets:partsmarket'%}" method="get">
+        <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
+            placeholder="Search in Parts Market" value={{input}}>
+    </form>
+</div>
 {% endblock search-form %}
 
 {% block content %}
