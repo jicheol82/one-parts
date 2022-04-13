@@ -33,10 +33,16 @@ class VirtualPoolView(OnlyForMember, ListView):
         return context
 
 
-class DetailView(OnlyForMember, DetailView):
+class VirtualPoolDetailView(OnlyForMember, DetailView):
     model = models.StockInfo
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["total_stock"] = models.Stock.total_stock(self.object.my_stock)
-        return context
+    fields = (
+        "my_stock.maker",
+        "my_stock.stock_name",
+        "num_stock",
+        "my_stock.total_stock",
+    )
+    labels = ({"num_stock": "test"},)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["total_stock"] = models.Stock.total_stock(self.object.my_stock)
+    #     return context
