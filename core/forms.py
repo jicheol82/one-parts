@@ -41,7 +41,9 @@ class SignUpForm(forms.Form):
         }
     """
 
-    username = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+    username = forms.EmailField(
+        label="Email", widget=forms.EmailInput(attrs={"placeholder": "Email"})
+    )
     nickname = forms.CharField(
         max_length=50, widget=forms.TextInput(attrs={"placeholder": "Nickname"})
     )

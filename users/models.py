@@ -113,4 +113,4 @@ class User(AbstractUser):
         self.save()
 
     def get_absolute_url(self):
-        return reverse("users:profile", kwargs={"pk": self.pk})
+        return reverse("users:account", kwargs={"pk": self.pk})

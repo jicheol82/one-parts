@@ -7,6 +7,10 @@ from django.contrib import messages
 class OnlyForMember(LoginRequiredMixin):
     login_url = reverse_lazy("core:login")
 
+    def handle_no_permission(self):
+        messages.error(self.request, "Please log in first")
+        return redirect("core:login")
+
 
 class OnlyForGuest(UserPassesTestMixin):
     def test_func(self):

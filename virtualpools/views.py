@@ -1,12 +1,11 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-from django.urls import reverse_lazy
-from core.mixins import OnlyForMember
+from core.mixins import OnlyForVerifiedMember
 from . import models
 
 # 회사인증이 완료된 사람만 조회가능
 # 로그인/리스트나 reservation을 배워야 할 듯
-class VirtualPoolView(OnlyForMember, ListView):
+class VirtualPoolView(OnlyForVerifiedMember, ListView):
     model = models.StockInfo
     paginate_by = 25
     paginate_orphans = 5
@@ -40,7 +39,7 @@ class VirtualPoolView(OnlyForMember, ListView):
 
 # 회사인증이 완료된 사람만 조회가능
 # 본인의 재고가 아닌 것은 안보이게 하기-어떻게?
-class VirtualPoolDetailView(OnlyForMember, DetailView):
+class VirtualPoolDetailView(OnlyForVerifiedMember, DetailView):
     model = models.StockInfo
     fields = (
         "my_stock.maker",

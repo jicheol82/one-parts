@@ -4,7 +4,7 @@ from users import views
 app_name = "users"
 
 urlpatterns = [
-    path("<int:pk>/", views.ProfileView.as_view(), name="profile"),
+    path("account/", views.AccountView.as_view(), name="account"),
     path(
         "update-profile/", views.UserUpdateProfileView.as_view(), name="update-profile"
     ),

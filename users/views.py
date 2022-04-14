@@ -1,14 +1,25 @@
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import UpdateView
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from core.mixins import OnlyForMember
 from users.models import User
 
 # 본인만 가능
-class ProfileView(OnlyForMember, DetailView):
+class AccountView(OnlyForMember, UpdateView):
     model = User
-    context_object_name = "context_obj"
+    # context_object_name = "context_obj"
+    fields = (
+        "profile_img",
+        "nickname",
+        "contact_number",
+        "company_email",
+        "interesting_equips",
+    )
+    template_name = "users/update-profile.html"
     login_url = reverse_lazy("core:login")
+
+    def get_object(self):
+        return self.request.user
 
 
 # 본인만 가능
