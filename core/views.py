@@ -24,7 +24,6 @@ class LoginView(OnlyForGuest, FormView):
         user = authenticate(self.request, username=email, password=password)
         if user is not None:
             login(self.request, user)
-            messages.success(self.request, f"Welcome back {user.nickname}")
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -37,10 +36,7 @@ class LoginView(OnlyForGuest, FormView):
 
 # @user_passes_test(lambda u: u.is_authenticated, login_url="core:home")
 def log_out(request):
-    if not request.user.is_authenticated:
-        messages.success(request, "You are already logged out")
-    else:
-        messages.success(request, "See you later")
+    if request.user.is_authenticated:
         logout(request)
     return redirect("core:home")
 

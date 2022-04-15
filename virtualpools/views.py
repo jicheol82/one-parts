@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-from core.mixins import OnlyForVerifiedMember
+from core.mixins import OnlyForMember, OnlyForVerifiedMember
 from . import models
 
 # 회사인증이 완료된 사람만 조회가능

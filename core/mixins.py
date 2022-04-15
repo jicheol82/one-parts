@@ -1,5 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    AccessMixin,
+)
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -9,7 +13,7 @@ class OnlyForMember(LoginRequiredMixin):
 
     def handle_no_permission(self):
         messages.error(self.request, "Please log in first")
-        return redirect("core:login")
+        return super().handle_no_permission()
 
 
 class OnlyForGuest(UserPassesTestMixin):
@@ -22,17 +26,17 @@ class OnlyForGuest(UserPassesTestMixin):
 
 
 class OnlyForVerifiedMember(UserPassesTestMixin):
+    login_url = reverse_lazy("core:login")
+
     def test_func(self):
-        try:
-            self.request.user.company_verified
+        if self.request.user.is_authenticated:
             return self.request.user.company_verified
-        except Exception:
-            return False
+        return False
 
     def handle_no_permission(self):
         if self.request.user.is_authenticated:
-            messages.error(self.request, "Please complete company verification.")
-            return redirect("users:profile", self.request.user.pk)
+            messages.error(self.request, "Please complete your company verifcation")
+            return redirect("users:account")
         else:
             messages.error(self.request, "Please log in first")
-            return redirect("core:login")
+            return super().handle_no_permission()

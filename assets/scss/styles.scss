@@ -15,10 +15,10 @@
 }
 
 .nav_link {
-    @apply border-b-2 border-white h-full flex items-center;
+    @apply border-b-2 border-white flex;
 
     a {
-        @apply py-4 px-2;
+        @apply px-2;
     }
 
     &:hover {
@@ -97,7 +97,7 @@ form {
     }
 
     &.warning {
-        @apply bg-yellow-400;
+        @apply bg-yellow-400 text-black;
     }
 }
 

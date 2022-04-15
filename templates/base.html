@@ -13,19 +13,24 @@
     </title>
 </head>
 
-<body class="container mt-12">
+<body class="container flex flex-col">
     {% include 'partials/messages.html' %}
-    <header class="container h-12 border-b border-gray-400 fixed top-0 bg-white">
+    <header class="container h-16 items-center flex fixed top-0 border-b border-gray-400  bg-white">
         {% include "partials/nav.html" %}
+
     </header>
+    <div class="min-h-75vh mt-16">
 
-    {% block search-form %}
-    {% endblock search-form %}
+        {% block search-form %}
+        {% endblock search-form %}
 
-    {% block content %}
-    {% endblock content %}
+        {% block content %}
+        {% endblock content %}
 
-    {% include "partials/footer.html" %}
+    </div>
+    <footer class="container border-t border-gray-400 font-medium text-gray-500 text-center">
+        {% include "partials/footer.html" %}
+    </footer>
 </body>
 
 </html>

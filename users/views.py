@@ -1,5 +1,6 @@
 from django.views.generic import UpdateView
 from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from core.mixins import OnlyForMember
 from users.models import User
@@ -16,7 +17,6 @@ class AccountView(OnlyForMember, UpdateView):
         "interesting_equips",
     )
     template_name = "users/update-profile.html"
-    login_url = reverse_lazy("core:login")
 
     def get_object(self):
         return self.request.user
@@ -42,10 +42,10 @@ class UserUpdateProfileView(OnlyForMember, UpdateView):
 
 
 # 본인만 가능
-class UpdatePasswordView(OnlyForMember, PasswordChangeView):
+class UpdatePasswordView(OnlyForMember, SuccessMessageMixin, PasswordChangeView):
 
     template_name = "users/update-password.html"
-    login_url = reverse_lazy("core:login")
+    success_message = "Password Updated"
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
@@ -55,3 +55,6 @@ class UpdatePasswordView(OnlyForMember, PasswordChangeView):
             "placeholder": "Confirm new password"
         }
         return form
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
