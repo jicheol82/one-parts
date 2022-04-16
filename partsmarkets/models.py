@@ -29,11 +29,7 @@ class Product(TimeStampedModel):
     contact_number = models.CharField(max_length=100, blank=True)
     price = models.IntegerField(validators=[MinValueValidator(1)])
     category = models.ForeignKey(EquipGroup, on_delete=models.SET_NULL, null=True)
-
-    def seller_name(self):
-        return self.seller.nickname
-
-    seller_name.short_description = "Seller"
+    on_sale = models.BooleanField(blank=True, default=False)
 
     def first_photo(self):
         (photo,) = self.photo_set.all()[:1]

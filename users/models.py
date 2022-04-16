@@ -101,7 +101,6 @@ class User(AbstractUser):
                 "emails/verify_company.html", {"secret": key}
             )
         # 사용자에게 전송할 메일 내용 생성
-
         send_mail(
             "Verify One-Parts Account",
             html_message,
