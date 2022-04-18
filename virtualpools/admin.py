@@ -2,8 +2,11 @@ from django.contrib import admin
 from virtualpools.models import *
 
 
-@admin.register(OtherMakerName)
-class OtherMakerNameAdmin(admin.ModelAdmin):
+@admin.register(OldMakerName)
+class OldMakerNameAdmin(admin.ModelAdmin):
+    """Old Maker Name Admin"""
+
+    search_fields = ("name", "official_name")
     list_display = (
         "name",
         "official_name",
@@ -13,30 +16,59 @@ class OtherMakerNameAdmin(admin.ModelAdmin):
 
 @admin.register(OfficialMakerName)
 class OfficialMakerNameAdmin(admin.ModelAdmin):
+    """Official Maker Name Admin"""
+
     pass
 
 
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
-    search_fields = ("stock_name", "model_name")
-    list_display = ("__str__", "total_stock")
+    """Stock Information Admin"""
+
+    search_fields = ("name", "maker__name", "model_name")
+    list_display = ("name", "maker", "model_name", "total_stock")
     list_filter = ("maker__name",)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "maker",
+                    "model_name",
+                    "spec",
+                    "owner_info",
+                ),
+            },
+        ),
+    )
 
 
 @admin.register(StockInfo)
 class StockInfoAdmin(admin.ModelAdmin):
-    list_filter = (
-        "owner__my_company__name",
+    search_fields = (
+        "owner",
+        "my_stock__name",
         "my_stock__maker",
-        "new_part",
+        "my_stock__model_name",
+        "place",
+        "contact_person",
+        "contact_info",
+    )
+    list_filter = (
+        "is_new",
+        "my_stock__maker",
     )
     list_display = (
         "owner",
         "my_stock",
         "num_stock",
-        "place",
-        "new_part",
+        # "my_stock__total_stock",
+        "is_new",
         "contact_person",
-        "contact_number",
+        "contact_info",
     )
-    raw_id_fields = ("my_stock", "owner")
+    raw_id_fields = (
+        "owner",
+        "my_stock",
+    )

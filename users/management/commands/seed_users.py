@@ -2,21 +2,25 @@ import random
 from django.core.management.base import BaseCommand
 from django.contrib.admin.utils import flatten
 from django_seed import Seed
-from users.models import Equipment, User, Company
+from users.models import Branch, Domain, Equipment, User, Company
+
+NAME = "users"
 
 
 class Command(BaseCommand):
 
-    help = "This command creates amenities"
+    help = f"This command creates {NAME}"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--number", default=1, type=int, help="How many users you want to create"
+            "--n", default=1, type=int, help=f"How many {NAME} you want to create"
         )
 
     def handle(self, *args, **options):
-        number = options.get("number")
+        number = options.get("n")
         companies = Company.objects.all()
+        branches = Branch.objects.all()
+        domains = Domain.objects.all()
         equipments = Equipment.objects.all()
         seeder = Seed.seeder()
         seeder.add_entity(
@@ -25,9 +29,11 @@ class Command(BaseCommand):
             {
                 "is_staff": False,
                 "is_superuser": False,
-                "contact_number": lambda x: seeder.faker.phone_number(),
-                "company_email": lambda x: seeder.faker.company_email(),
-                "my_company": lambda x: random.choice(companies),
+                "email": lambda x: seeder.faker.company_email(),
+                "company": lambda x: random.choice(companies),
+                "branch": lambda x: random.choice(branches),
+                "is_verified": lambda x: random.randint(0, 1),
+                "token": "",
             },
         )
         created_pk = seeder.execute()
@@ -37,6 +43,6 @@ class Command(BaseCommand):
             random_items = random.sample(
                 list(equipments), random.randint(1, len(equipments))
             )
-            user.interesting_equips.add(*random_items)
+            user.my_equips.add(*random_items)
 
-        self.stdout.write(self.style.SUCCESS(f"{number} users created!"))
+        self.stdout.write(self.style.SUCCESS(f"{number} {NAME} created!"))

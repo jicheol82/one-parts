@@ -1,40 +1,36 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.utils.translation import gettext_lazy as _
 from core.models import TimeStampedModel
-from users.models import User
-
-
-class AbstractMaker(TimeStampedModel):
-    name = models.CharField(max_length=100, unique=True)
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.name
-
 
 # 회사 이름 집합 ex) (mhi, 미쯔비시중공업, mhps) -> MPW
-class OfficialMakerName(AbstractMaker):
-    """Maker Model Definition"""
+class OfficialMakerName(TimeStampedModel):
+    """Official Maker Name Model Definition"""
 
-    pass
+    name = models.CharField(_("official company name"), max_length=30, unique=True)
 
 
-class OtherMakerName(AbstractMaker):
-    """SimilarName Model Definition"""
+# 옛날 회사명
+class OldMakerName(TimeStampedModel):
+    """Old Maker Name Model Definition"""
 
-    official_name = models.ForeignKey(
-        OfficialMakerName, on_delete=models.SET_NULL, null=True
-    )
+    name = models.CharField(_("old manufacturer name"), max_length=30, unique=True)
+    official_name = models.ForeignKey("OfficialMakerName", on_delete=models.CASCADE)
 
 
 # Virtual Pool 등록 상품
 class Stock(TimeStampedModel):
-    stock_name = models.CharField(max_length=140)
-    maker = models.ForeignKey(OfficialMakerName, on_delete=models.SET_NULL, null=True)
-    model_name = models.CharField(max_length=140)
-    spec = models.CharField(max_length=180, blank=True)
+    """Stock Information Model Definition"""
+
+    name = models.CharField(_("stock name"), max_length=30)
+    maker = models.ForeignKey(
+        "OfficialMakerName",
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name=_("manufacturer"),
+    )
+    model_name = models.CharField(_("model"), max_length=30)
+    spec = models.CharField(_("specification"), max_length=30, blank=True)
     # 재고품 총 갯수
     def total_stock(self):
         stockinfo_objs = self.stockinfo_set.all()
@@ -48,23 +44,21 @@ class Stock(TimeStampedModel):
         owner_list = []
         for i in stockinfo_objs:
             owner_list.append(i.owner)
-        print(owner_list)
         return owner_list
-
-    def __str__(self):
-        return f"'{self.maker}' / '{self.stock_name}' / '{self.model_name}'"
 
 
 # Virtual Pool 사용자의 등록 정보
 class StockInfo(TimeStampedModel):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    my_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    num_stock = models.IntegerField(validators=[MinValueValidator(1)])
-    place = models.CharField(max_length=80)
-    new_part = models.BooleanField()
-    contact_person = models.CharField(max_length=100, blank=True)
-    contact_number = models.CharField(max_length=100, blank=True)
-
-    # __str__은 string을 return해야 한다
-    def __str__(self):
-        return str(self.my_stock)
+    owner = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        verbose_name=_("owner"),
+    )
+    my_stock = models.ForeignKey("Stock", on_delete=models.CASCADE)
+    num_stock = models.IntegerField(
+        _("num of stocks"), validators=[MinValueValidator(0)]
+    )
+    place = models.CharField(_("using place"), max_length=30)
+    is_new = models.BooleanField(_("new part"))
+    contact_person = models.CharField(_("person in charge"), max_length=20, blank=True)
+    contact_info = models.CharField(_("contact information"), max_length=30, blank=True)

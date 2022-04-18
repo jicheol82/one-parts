@@ -5,6 +5,8 @@ from .models import *
 # 설비 Admin
 @admin.register(EquipGroup)
 class EuipGroupAdmin(admin.ModelAdmin):
+    """EuipGroup Admin"""
+
     search_fields = ("name",)
     list_display = ("name", "count_equips")
 
@@ -16,25 +18,37 @@ class EuipGroupAdmin(admin.ModelAdmin):
 
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
+    """Equipment Admin"""
+
     search_fields = ("name",)
-    list_display = ("name", "equipment_group")
-    list_filter = ("equipment_group",)
-    raw_id_fields = ("equipment_group",)
+    list_display = ("name", "group")
+    list_filter = ("group__name",)
+    raw_id_fields = ("group",)
 
 
 # 회사 Admin
-@admin.register(Domain, Branch)
+@admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
     """Domain Admin Definition"""
 
-    list_display = ("name",)
+    search_fields = ("name", "company__name")
+    list_display = ("name", "company")
+    raw_id_fields = ("company",)
+
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+    """Domain Admin Definition"""
+
+    # list_display = ("name",)
+    pass
 
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
     """Company Admin Definition"""
 
-    search_fields = ("name", "domains", "branches")
+    search_fields = ("name",)
 
     list_display = (
         "name",
@@ -46,10 +60,10 @@ class CompanyAdmin(admin.ModelAdmin):
     )
 
     # make "MtoM select form" beautiful
-    filter_horizontal = ("domains", "branches")
+    filter_horizontal = ("branches",)
 
     def count_domains(self, obj):
-        return obj.domains.count()
+        return obj.domain_set.count()
 
     count_domains.short_description = "#Domains"
 
@@ -71,64 +85,55 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = (
         "username",
-        "nickname",
-        "my_company__name",
-        "company_email",
-        "contact_number",
+        "email",
+        "company",
     )
     list_filter = (
-        "my_company",
-        "interesting_equips",
-    ) + UserAdmin.list_filter
+        "is_verified",
+        "is_active",
+        "company",
+    )
 
     # overal view
     list_display = (
         "username",
-        "nickname",
+        "profile_img",
+        "email",
+        "company",
+        "branch",
         "count_equips",
-        "my_company",
-        "my_branch",
-        "company_email",
-        "contact_number",
-        "is_active",
+        "is_verified",
         "is_staff",
-        "is_superuser",
+        "is_active",
         "date_joined",
-        "user_verified",
-        "user_secret",
-        "company_verified",
-        "company_secret",
-        # "email_verified",
-        # "email_secret",
-        # "login_method",
     )
 
-    raw_id_fields = ("my_company", "my_branch")
-
-    def count_equips(self, obj):
-        return obj.interesting_equips.count()
-
-    count_equips.short_description = "#equips"
-
     # detail view
-    fieldsets = UserAdmin.fieldsets + (
+    fieldsets = (
         (
             "Custom Profile",
             {
                 "fields": (
                     "profile_img",
-                    "nickname",
-                    "my_company",
-                    "company_email",
-                    "contact_number",
-                    "interesting_equips",
-                    "user_verified",
-                    "user_secret",
-                    "company_verified",
-                    "company_secret",
+                    "username",
+                    "email",
+                    "company",
+                    "branch",
+                    "my_equips",
+                    "is_verified",
+                    "token",
+                    "is_staff",
+                    "is_active",
+                    "date_joined",
                 )
             },
         ),
     )
 
-    filter_horizontal = ("interesting_equips",)
+    raw_id_fields = ("company", "branch")
+    filter_horizontal = ("my_equips",)
+
+    def count_equips(self, obj):
+        return obj.my_equips.count()
+
+    count_equips.short_description = "#equips"
