@@ -2,20 +2,20 @@ from django.core.management.base import BaseCommand
 from django_seed import Seed
 from virtualpools.models import OfficialMakerName
 
-TITLE = "official names"
+NAME = "official company nemes"
 
 
 class Command(BaseCommand):
 
-    help = f"This command creates {TITLE}"
+    help = f"This command creates {NAME}"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--number", default=1, type=int, help=f"How many {TITLE} you want to create"
+            "--n", default=1, type=int, help=f"How many {NAME} you want to create"
         )
 
     def handle(self, *args, **options):
-        number = options.get("number")
+        number = options.get("n")
         seeder = Seed.seeder()
         seeder.add_entity(
             OfficialMakerName,
@@ -26,4 +26,4 @@ class Command(BaseCommand):
         )
         seeder.execute()
 
-        self.stdout.write(self.style.SUCCESS(f"{number} {TITLE}created!"))
+        self.stdout.write(self.style.SUCCESS(f"{number} {NAME}created!"))

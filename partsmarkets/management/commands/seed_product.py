@@ -6,20 +6,21 @@ from partsmarkets.models import Product, Photo
 from users.models import User, EquipGroup
 from virtualpools.models import OfficialMakerName
 
+NAME = "products"
+
 
 class Command(BaseCommand):
 
-    help = "This command creates products"
+    help = f"This command creates {NAME}"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--number", default=1, type=int, help="How many products you want to create"
+            "--n", default=1, type=int, help=f"How many {NAME} you want to create"
         )
 
     def handle(self, *args, **options):
-        number = options.get("number")
+        number = options.get("n")
         seeder = Seed.seeder()
-        # 생성되어 있는 모든 User, OfficialMakerName, EquipGroup 객체를 가져온다-좋은 방법은 아님
         sellers = User.objects.all()
         makers = OfficialMakerName.objects.all()
         categories = EquipGroup.objects.all()
@@ -27,14 +28,11 @@ class Command(BaseCommand):
             Product,
             number,
             {
-                # lambda가 없이 실행하면 add_entity가 생성될때 입력값을 먼저 저장하고 횟수만큼 반복하지 않는 것같다
-                # lambda가 있어야지 매번 새로운 값이 호출될 수 있다
-                # MtoM 필드는 여기서 생성 불가
                 "seller": lambda x: random.choice(sellers),
                 "maker": lambda x: random.choice(makers),
                 "num_product": lambda x: random.randint(0, 100),
                 "contact_person": lambda x: seeder.faker.name(),
-                "contact_number": lambda x: seeder.faker.phone_number(),
+                "contact_info": lambda x: seeder.faker.phone_number(),
                 "category": lambda x: random.choice(categories),
             },
         )
@@ -51,6 +49,6 @@ class Command(BaseCommand):
             for i in range(1, random.randint(2, 6)):
                 Photo.objects.create(
                     product=product,
-                    file=f"product_photos/{random.randint(1, 31)}.webp",
+                    file=f"product_photos/{random.randint(1, 27)}.jpg",
                 )
         self.stdout.write(self.style.SUCCESS(f"{number} product created!"))

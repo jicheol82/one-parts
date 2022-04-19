@@ -41,7 +41,6 @@ class Product(TimeStampedModel):
         "users.EquipGroup",
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name=_("category"),
     )
     on_sale = models.BooleanField(_("on sale"), blank=True, default=False)
 

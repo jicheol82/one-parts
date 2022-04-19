@@ -3,20 +3,20 @@ from django.core.management.base import BaseCommand
 from django_seed import Seed
 from virtualpools.models import OfficialMakerName, Stock
 
-TITLE = "stocks"
+NAME = "stocks"
 
 
 class Command(BaseCommand):
 
-    help = f"This command creates {TITLE}"
+    help = f"This command creates {NAME}"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--number", default=1, type=int, help=f"How many {TITLE} you want to create"
+            "--n", default=1, type=int, help=f"How many {NAME} you want to create"
         )
 
     def handle(self, *args, **options):
-        number = options.get("number")
+        number = options.get("n")
         seeder = Seed.seeder()
         # 생성되어 있는 모든 OfficialMakerName 객체를 가져온다-좋은 방법은 아님
         maker = OfficialMakerName.objects.all()
@@ -34,4 +34,4 @@ class Command(BaseCommand):
         # {<class 'users.models.Company'>: [22, 23]}
         seeder.execute()
 
-        self.stdout.write(self.style.SUCCESS(f"{number} {TITLE} created!"))
+        self.stdout.write(self.style.SUCCESS(f"{number} {NAME} created!"))
