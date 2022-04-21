@@ -103,9 +103,9 @@ class CustomUserAdmin(UserAdmin):
         "branch",
         "count_equips",
         "is_verified",
-        "is_staff",
+        "is_superuser",
         "is_active",
-        "date_joined",
+        "last_login",
     )
 
     # detail view

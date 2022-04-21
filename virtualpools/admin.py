@@ -37,7 +37,6 @@ class StockAdmin(admin.ModelAdmin):
                     "maker",
                     "model_name",
                     "spec",
-                    "owner_info",
                 ),
             },
         ),
@@ -47,9 +46,9 @@ class StockAdmin(admin.ModelAdmin):
 @admin.register(StockInfo)
 class StockInfoAdmin(admin.ModelAdmin):
     search_fields = (
-        "owner",
+        "owner__username",
         "my_stock__name",
-        "my_stock__maker",
+        "my_stock__maker__name",
         "my_stock__model_name",
         "place",
         "contact_person",

@@ -7,7 +7,7 @@ from . import models
 # 로그인/리스트나 reservation을 배워야 할 듯
 class VirtualPoolView(OnlyForVerifiedMember, ListView):
     model = models.StockInfo
-    paginate_by = 25
+    paginate_by = 10
     paginate_orphans = 5
     ordering = "created"
 
@@ -19,7 +19,7 @@ class VirtualPoolView(OnlyForVerifiedMember, ListView):
             queryset = queryset.filter(
                 Q(pk=pk),
                 (
-                    Q(my_stock__stock_name__contains=search)
+                    Q(my_stock__name__contains=search)
                     | Q(my_stock__maker__name__contains=search)
                     | Q(my_stock__model_name__contains=search)
                 ),

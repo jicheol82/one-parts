@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
-    AccessMixin,
 )
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect
@@ -30,7 +29,7 @@ class OnlyForVerifiedMember(UserPassesTestMixin):
 
     def test_func(self):
         if self.request.user.is_authenticated:
-            return self.request.user.company_verified
+            return self.request.user.is_verified
         return False
 
     def handle_no_permission(self):

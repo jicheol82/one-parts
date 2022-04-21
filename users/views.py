@@ -11,10 +11,9 @@ class AccountView(OnlyForMember, UpdateView):
     # context_object_name = "context_obj"
     fields = (
         "profile_img",
-        "nickname",
-        "contact_number",
-        "company_email",
-        "interesting_equips",
+        "username",
+        "email",
+        "my_equips",
     )
     template_name = "users/update-profile.html"
 
@@ -28,12 +27,11 @@ class UserUpdateProfileView(OnlyForMember, UpdateView):
     template_name = "users/update-profile.html"
     login_url = reverse_lazy("core:login")
     fields = (
-        "nickname",
-        "contact_number",
-        "company_email",
-        "my_company",
-        "my_branch",
-        "interesting_equips",
+        "username",
+        "email",
+        "company",
+        "branch",
+        "my_equips",
     )
 
     def get_object(self):

@@ -1,11 +1,11 @@
-<div class="w-1/4 mb-10 px-2">
+<div class="w-1/4 mb-10 px-2 overflow-hidden">
     <a href="{% url 'partsmarkets:detail' product.pk %}">
         <div class="w-full h-64 bg-cover bg-center rounded-lg mb-2"
             style="background-image: url({{product.first_photo}})">
         </div>
         <div class="flex h-8 items-center justify-between text-sm">
             <div class="w-1/2">
-                {% if product.new_part %}
+                {% if product.is_new %}
                 <span class="uppercase font-medium text-xs border border-black text-black rounded py-1 px-1">
                     unused
                 </span>
