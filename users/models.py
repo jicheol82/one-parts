@@ -12,10 +12,16 @@ from core.models import TimeStampedModel
 class EquipGroup(TimeStampedModel):
     name = models.CharField(_("equipment Group"), max_length=20, unique=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Equipment(TimeStampedModel):
     name = models.CharField(_("equipment"), max_length=20, unique=True)
     group = models.ForeignKey("EquipGroup", on_delete=models.SET_NULL, null=True)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 # 회사관련 모델 생성하기
@@ -25,6 +31,9 @@ class Branch(TimeStampedModel):
     class Meta:
         verbose_name_plural = _("branches")
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Company(TimeStampedModel):
     name = models.CharField(_("company"), max_length=20)
@@ -32,6 +41,9 @@ class Company(TimeStampedModel):
 
     class Meta:
         verbose_name_plural = _("companies")
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Domain(TimeStampedModel):

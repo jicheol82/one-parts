@@ -1,31 +1,34 @@
-from cProfile import label
-from enum import unique
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from users.models import User
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+    username = forms.CharField(
+        label=_("ID"), widget=forms.TextInput(attrs={"placeholder": _("Username")})
+    )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+        widget=forms.PasswordInput(attrs={"placeholder": _("Password")})
     )
 
     def clean(self):
         # login.html의 form에서 입력된 값 가져오기
-        email = self.cleaned_data.get("email")
+        username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
         # 로그인 정보의 일치 여부는 form에서 처리하고
         # 인증은 view에서 처리한다
         try:
-            user = User.objects.get(username=email)
+            user = User.objects.get(username=username)
             if user.check_password(password):
                 # cleaned_data는 딕셔너리
                 return self.cleaned_data
             else:
                 # 원하는 필드에 에러 메시지를 생성한다
-                self.add_error("password", forms.ValidationError("Password is wrong"))
+                self.add_error(
+                    "password", forms.ValidationError(_("Password is wrong"))
+                )
         except User.DoesNotExist:
-            self.add_error("email", forms.ValidationError("User does not exist"))
+            self.add_error("username", forms.ValidationError(_("ID does not exist")))
 
 
 class SignUpForm(forms.Form):
@@ -41,18 +44,20 @@ class SignUpForm(forms.Form):
         }
     """
 
-    username = forms.EmailField(
-        label="Email", widget=forms.EmailInput(attrs={"placeholder": "Email"})
+    username = forms.CharField(
+        label=_("ID"), widget=forms.TextInput(attrs={"placeholder": _("Username")})
     )
     nickname = forms.CharField(
-        max_length=50, widget=forms.TextInput(attrs={"placeholder": "Nickname"})
+        label=_("nickname"),
+        widget=forms.TextInput(attrs={"placeholder": _("Nickname")}),
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+        label=_("Password"),
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
     )
     password1 = forms.CharField(
+        label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password"}),
-        # label="Confirm Password",
     )
 
     def clean_username(self):

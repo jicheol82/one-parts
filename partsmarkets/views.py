@@ -17,10 +17,29 @@ class PartsMarketView(ListView):
         search = self.request.GET.get("search")
         if search is not None:
             queryset = queryset.filter(
-                Q(product_name__contains=search)
+                Q(name__contains=search)
                 | Q(maker__name__contains=search)
                 | Q(model_name__contains=search)
             )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search = self.request.GET.get("search")
+        if search:
+            context["input"] = search
+        return context
+
+
+class PartsMarketMyListView(ListView):
+    model = models.Product
+    paginate_by = 16
+    paginate_orphans = 12
+    ordring = "created"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(seller__pk=self.request.user.pk)
         return queryset
 
     def get_context_data(self, **kwargs):

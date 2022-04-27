@@ -8,22 +8,6 @@ from users.models import User
 # 본인만 가능
 class AccountView(OnlyForMember, UpdateView):
     model = User
-    # context_object_name = "context_obj"
-    fields = (
-        "profile_img",
-        "username",
-        "email",
-        "my_equips",
-    )
-    template_name = "users/update-profile.html"
-
-    def get_object(self):
-        return self.request.user
-
-
-# 본인만 가능
-class UserUpdateProfileView(OnlyForMember, UpdateView):
-    model = User
     template_name = "users/update-profile.html"
     login_url = reverse_lazy("core:login")
     fields = (

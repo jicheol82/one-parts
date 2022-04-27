@@ -5,11 +5,16 @@ Virtual Pool
 {% endblock page_name %}
 
 {% block search-form %}
-<div>
-    <form class="p-3 w-2/5" action="{%url 'virtualpools:virtualpool'%}" method="get">
-        <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
-            placeholder="Search in Virtual Pool" value={{input}}>
-    </form>
+<div class="flex items-center">
+    <div class="w-1/2">
+        <form class="p-3 w-4/5" action="{%url 'virtualpools:virtualpool'%}" method="get">
+            <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
+                placeholder="Search in Virtual Pool" value={{input}}>
+        </form>
+    </div>
+    <div class="w-1/2 flex justify-end">
+        <a href="{%url 'virtualpools:create'%}" class="h-full p-3 rounded-lg border border-blue-400 ">Register Part</a>
+    </div>
 </div>
 {% endblock search-form %}
 

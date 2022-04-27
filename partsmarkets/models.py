@@ -44,6 +44,16 @@ class Product(TimeStampedModel):
     )
     on_sale = models.BooleanField(_("on sale"), blank=True, default=False)
 
-    def first_photo(self):
-        (photo,) = self.photo_set.all()[:1]
-        return photo.file.url
+    def get_first_photo(self):
+        try:
+            (photo,) = self.photo_set.all()[:1]
+            return photo.file.url
+        except ValueError:
+            return None
+
+    def get_photos(self):
+        try:
+            photos = self.photo_set.all()[:3]
+            return photos
+        except ValueError:
+            return None

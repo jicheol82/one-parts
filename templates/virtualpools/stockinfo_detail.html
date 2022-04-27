@@ -5,11 +5,16 @@ Stock Detail
 {% endblock page_name %}
 
 {% block search-form %}
-<div>
-    <form class="p-3 w-2/5" action="{%url 'virtualpools:virtualpool'%}" method="get">
-        <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
-            placeholder="Search in Virtual Pool" value={{input}}>
-    </form>
+<div class="flex items-center">
+    <div class="w-1/2">
+        <form class="p-3 w-4/5" action="{%url 'virtualpools:virtualpool'%}" method="get">
+            <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
+                placeholder="Search in Virtual Pool" value={{input}}>
+        </form>
+    </div>
+    <div class="w-1/2 flex justify-end">
+        <a href="#" class="h-full p-3 rounded-lg border border-blue-400 ">Register Part</a>
+    </div>
 </div>
 {% endblock search-form %}
 
@@ -20,24 +25,34 @@ Stock Detail
         <span>Manufacturer</span>
         <span>Product</span>
         <span>Model</span>
+        <span>Use Place</span>
+        <span>New Part</span>
         <span>Number of My Stock</span>
         <span>Available Stocks</span>
         <span>Owner Info</span>
     </div>
     <div class="flex flex-col justify-start w-2/3 p-4">
         <span class="truncate">{{stockinfo.my_stock.maker}}</span>
-        <span class="truncate">{{stockinfo.my_stock.stock_name}}</span>
+        <span class="truncate">{{stockinfo.my_stock.name}}</span>
         <span class="truncate">{{stockinfo.my_stock.model_name}}</span>
+        <span class="truncate">{{stockinfo.place}}</span>
+        <span class="truncate">{{stockinfo.is_new}}</span>
         <span class="truncate">{{stockinfo.num_stock}}</span>
         <span class="truncate">{{total_stock}}</span>
         {% for a in owner_info %}
-        <span class="truncate">{{a}}</span>
+        <span class="truncate">{{a.contact_person}}</span>
+        <span class="truncate">{{a.contact_info}}</span>
         {% endfor %}
         <!-- <span class="truncate">{{stockinfo.my_stock.total_stock}}</span> 
         {% for a in stockinfo.my_stock.owner_info %}
         <span class="truncate">{{a}}</span>
         {% endfor %}-->
     </div>
+</div>
+<div>
+    <a href="{% url 'virtualpools:update' stockinfo.pk%}">Update</a>
+    <a href="{% url 'virtualpools:delete' stockinfo.pk%}">Delete</a>
+
 </div>
 
 {% endblock content %}

@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
@@ -43,7 +44,7 @@ class Stock(TimeStampedModel):
         stockinfo_objs = self.stockinfo_set.all()
         owner_list = []
         for i in stockinfo_objs:
-            owner_list.append(i.owner)
+            owner_list.append(i)
         return owner_list
 
 
@@ -62,3 +63,6 @@ class StockInfo(TimeStampedModel):
     is_new = models.BooleanField(_("new part"))
     contact_person = models.CharField(_("person in charge"), max_length=20, blank=True)
     contact_info = models.CharField(_("contact information"), max_length=30, blank=True)
+
+    def get_absolute_url(self):
+        return reverse("virtualpools:detail", kwargs={"pk": self.pk})
