@@ -13,7 +13,7 @@ Stock Detail
         </form>
     </div>
     <div class="w-1/2 flex justify-end">
-        <a href="#" class="h-full p-3 rounded-lg border border-blue-400 ">Register Part</a>
+        <a href="{%url 'virtualpools:create'%}" class="h-full p-3 rounded-lg border border-blue-400 ">Register Part</a>
     </div>
 </div>
 {% endblock search-form %}
@@ -38,8 +38,8 @@ Stock Detail
         <span class="truncate">{{stockinfo.place}}</span>
         <span class="truncate">{{stockinfo.is_new}}</span>
         <span class="truncate">{{stockinfo.num_stock}}</span>
-        <span class="truncate">{{total_stock}}</span>
-        {% for a in owner_info %}
+        <span class="truncate">{{stockinfo.my_stock.total_stock}}</span>
+        {% for a in stockinfo.my_stock.owner_info %}
         <span class="truncate">{{a.contact_person}}</span>
         <span class="truncate">{{a.contact_info}}</span>
         {% endfor %}

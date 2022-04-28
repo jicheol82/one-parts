@@ -19,6 +19,10 @@ class OldMakerName(TimeStampedModel):
     official_name = models.ForeignKey("OfficialMakerName", on_delete=models.CASCADE)
 
 
+class Compatibility(TimeStampedModel):
+    group = models.ManyToManyField("stock", blank=True)
+
+
 # Virtual Pool 등록 상품
 class Stock(TimeStampedModel):
     """Stock Information Model Definition"""
@@ -38,13 +42,15 @@ class Stock(TimeStampedModel):
         total = 0
         for i in stockinfo_objs:
             total += i.num_stock
+        print("total_stock : ", total)
         return total
 
     def owner_info(self):
-        stockinfo_objs = self.stockinfo_set.all()
+        stockinfo_objs = self.stockinfo_set.filter(num_stock__gt=0)
         owner_list = []
         for i in stockinfo_objs:
             owner_list.append(i)
+        print("owner_list : ", owner_list)
         return owner_list
 
 

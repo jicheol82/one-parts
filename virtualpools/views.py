@@ -2,6 +2,8 @@ from django.views.generic import ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.db.models import Q
 from django.contrib import messages
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
 from core.mixins import OnlyForMember, OnlyForVerifiedMember
 from . import models, forms
 
@@ -39,26 +41,19 @@ class VirtualPoolView(OnlyForVerifiedMember, ListView):
         return context
 
 
-class VirtualPoolDetailView(OnlyForVerifiedMember, DetailView):
-    model = models.StockInfo
-    fields = (
-        "my_stock.maker",
-        "my_stock.stock_name",
-        "num_stock",
-        "my_stock.total_stock",
-    )
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["total_stock"] = models.Stock.total_stock(self.object.my_stock)
-        context["owner_info"] = models.Stock.owner_info(self.object.my_stock)
-        return context
-
-    def get_object(self, queryset=None):
-        stockinfo = super().get_object(queryset=queryset)
-        if stockinfo.owner.pk != self.request.user.pk:
-            messages.error(self.request, "You're not allow to see this parts")
-        return stockinfo
+@login_required(login_url="core:login")
+def virtualpoolDetailView(request, pk):
+    try:
+        stockinfo = models.StockInfo.objects.get(pk=pk)
+        if stockinfo.owner.pk != request.user.pk:
+            messages.error(request, "You're not allow to see this parts")
+            return redirect("virtualpools:virtualpool")
+        else:
+            return render(
+                request, "virtualpools/stockinfo_detail.html", {"stockinfo": stockinfo}
+            )
+    except models.StockInfo.DoesNotExist:
+        raise Http404()
 
 
 def VirtualPoolCreateView(request):

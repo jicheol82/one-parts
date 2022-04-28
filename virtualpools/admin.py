@@ -21,6 +21,11 @@ class OfficialMakerNameAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Compatibility)
+class CompatibilityAdmin(admin.ModelAdmin):
+    filter_horizontal = ("group",)
+
+
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
     """Stock Information Admin"""
