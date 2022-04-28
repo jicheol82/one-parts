@@ -1,5 +1,7 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView
+from django.shortcuts import render, redirect
 from django.db.models import Q
+from django.contrib import messages
 from django.urls import reverse_lazy
 from core.mixins import OnlyForVerifiedMember
 from . import models
@@ -55,3 +57,30 @@ class DetailView(OnlyForVerifiedMember, DetailView):
     model = models.Product
 
     login_url = reverse_lazy("core:login")
+
+
+class PartsMarketEditView(UpdateView):
+    model = models.Product
+    fields = (
+        "description",
+        "num_product",
+        "contact_person",
+        "contact_info",
+        "price",
+        "on_sale",
+    )
+    template_name = "partsmarkets/update.html"
+
+
+def partsMarketDeleteView(request, pk):
+    user = request.user
+    try:
+        product = models.Product.objects.get(pk=pk)
+        if product.seller.pk != user.pk:
+            messages.error(request, "Can't delete!")
+        else:
+            models.Product.objects.filter(pk=pk).delete()
+            messages.success(request, "Product Deleted")
+        return redirect("partsmarkets:partsmarket")
+    except models.Product.DoesNotExist:
+        return redirect("partsmarkets:partsmarket")

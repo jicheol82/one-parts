@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
@@ -57,3 +58,6 @@ class Product(TimeStampedModel):
             return photos
         except ValueError:
             return None
+
+    def get_absolute_url(self):
+        return reverse("partsmarkets:detail", kwargs={"pk": self.pk})

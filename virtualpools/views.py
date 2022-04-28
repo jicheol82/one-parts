@@ -56,7 +56,7 @@ def virtualpoolDetailView(request, pk):
         raise Http404()
 
 
-def VirtualPoolCreateView(request):
+def virtualPoolCreateView(request):
     if request.method == "POST":
         stock_form = forms.CreateStockForm(request.POST)
         stockinfo_form = forms.CreateStockInfoForm(request.POST)
@@ -96,7 +96,7 @@ class VirutalPoolUpdateView(UpdateView):
     #     return super().get_context_data(**kwargs)
 
 
-def VirtualPoolDeleteView(request, pk):
+def virtualPoolDeleteView(request, pk):
     user = request.user
     try:
         stockinfo = models.StockInfo.objects.get(pk=pk)

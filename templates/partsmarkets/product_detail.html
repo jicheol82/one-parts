@@ -68,4 +68,8 @@ Virtual Pool
         </tr>
     </table>
 </div>
+<div>
+    <a href="{% url 'partsmarkets:edit' product.pk%}">Edit</a>
+    <a href="{% url 'partsmarkets:delete' product.pk%}">Delete</a>
+</div>
 {% endblock content %}

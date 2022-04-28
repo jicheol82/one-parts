@@ -1,0 +1,10 @@
+<span class="truncate">{{product.name}}</span>
+<span class="truncate">{{product.maker.name}}</span>
+<span class="truncate">{{product.model_name}}</span>
+<span class="truncate">{{product.spec}}</span>
+<span class="truncate">{{product.is_new}}</span>
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button>submit</button>
+</form>
