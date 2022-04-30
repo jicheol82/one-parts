@@ -50,7 +50,7 @@ class Stock(TimeStampedModel):
         owner_list = []
         for i in stockinfo_objs:
             owner_list.append(i)
-        print("owner_list : ", owner_list)
+        print("owner_info")
         return owner_list
 
 

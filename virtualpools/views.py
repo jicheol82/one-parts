@@ -1,8 +1,9 @@
+from urllib.request import HTTPRedirectHandler
 from django.views.generic import ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.db.models import Q
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from core.mixins import OnlyForMember, OnlyForVerifiedMember
 from . import models, forms
@@ -56,6 +57,7 @@ def virtualpoolDetailView(request, pk):
         raise Http404()
 
 
+@login_required(login_url="core:login")
 def virtualPoolCreateView(request):
     if request.method == "POST":
         stock_form = forms.CreateStockForm(request.POST)
@@ -90,10 +92,24 @@ class VirutalPoolUpdateView(UpdateView):
         "contact_info",
     )
     template_name = "virtualpools/update.html"
-    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-    #     context = super().get_context_data(**kwargs)
-    #     context[""]
-    #     return super().get_context_data(**kwargs)
+
+    # def get_object(self, queryset=None):
+    #     pk = self.kwargs["pk"]
+    #     stockinfo = models.StockInfo.objects.get(pk=pk)
+    #     queryset = super().get_queryset()
+    #     return stockinfo
+
+
+def virtualPoolUpdateView(request, pk):
+    user = request.user
+    try:
+        stockinfo = models.StockInfo.objects.get(pk=pk)
+        if stockinfo.owner.pk != user.pk:
+            messages.error(request, "Can't delete!")
+        else:
+            return render(request, "virtualpools/update.html", {"stockinfo": stockinfo})
+    except models.StockInfo.DoesNotExist:
+        pass
 
 
 def virtualPoolDeleteView(request, pk):
@@ -103,7 +119,7 @@ def virtualPoolDeleteView(request, pk):
         if stockinfo.owner.pk != user.pk:
             messages.error(request, "Can't delete!")
         else:
-            models.StockInfo.objects.filter(pk=pk).delete()
+            stockinfo.delete()
             messages.success(request, "Stock Deleted")
         return redirect("virtualpools:virtualpool")
     except models.StockInfo.DoesNotExist:
