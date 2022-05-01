@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect
 from django.db.models import Q
@@ -59,7 +60,22 @@ class DetailView(OnlyForVerifiedMember, DetailView):
     login_url = reverse_lazy("core:login")
 
 
-class PartsMarketEditView(UpdateView):
+class OnlyForOwner(UserPassesTestMixin):
+    def test_func(self):
+        pk = self.kwargs["pk"]
+        user_pk = self.request.user.pk
+        product = models.Product.objects.get(pk=pk)
+        if product.seller.pk != user_pk:
+            return False
+        else:
+            return True
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You're not allow to edit this product.")
+        return redirect("partsmarkets:partsmarket")
+
+
+class PartsMarketEditView(OnlyForOwner, UpdateView):
     model = models.Product
     fields = (
         "description",
@@ -69,7 +85,7 @@ class PartsMarketEditView(UpdateView):
         "price",
         "on_sale",
     )
-    template_name = "partsmarkets/update.html"
+    template_name = "partsmarkets/edit.html"
 
 
 def partsMarketDeleteView(request, pk):
