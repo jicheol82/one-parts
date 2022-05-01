@@ -1,4 +1,5 @@
 from urllib.request import HTTPRedirectHandler
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.db.models import Q
@@ -7,6 +8,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from core.mixins import OnlyForMember, OnlyForVerifiedMember
 from . import models, forms
+
 
 # 회사인증이 완료된 사람만 조회가능
 # 로그인/리스트나 reservation을 배워야 할 듯
@@ -82,7 +84,22 @@ def virtualPoolCreateView(request):
     return render(request, "virtualpools/create.html", context)
 
 
-class VirutalPoolUpdateView(UpdateView):
+class OnlyForOwner(UserPassesTestMixin):
+    def test_func(self):
+        pk = self.kwargs["pk"]
+        user_pk = self.request.user.pk
+        stockinfo = models.StockInfo.objects.get(pk=pk)
+        if stockinfo.owner.pk != user_pk:
+            return False
+        else:
+            return True
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You're not allow to edit this part.")
+        return redirect("virtualpools:virtualpool")
+
+
+class VirutalPoolEditView(OnlyForOwner, UpdateView):
     model = models.StockInfo
     fields = (
         "num_stock",
@@ -91,25 +108,7 @@ class VirutalPoolUpdateView(UpdateView):
         "contact_person",
         "contact_info",
     )
-    template_name = "virtualpools/update.html"
-
-    # def get_object(self, queryset=None):
-    #     pk = self.kwargs["pk"]
-    #     stockinfo = models.StockInfo.objects.get(pk=pk)
-    #     queryset = super().get_queryset()
-    #     return stockinfo
-
-
-def virtualPoolUpdateView(request, pk):
-    user = request.user
-    try:
-        stockinfo = models.StockInfo.objects.get(pk=pk)
-        if stockinfo.owner.pk != user.pk:
-            messages.error(request, "Can't delete!")
-        else:
-            return render(request, "virtualpools/update.html", {"stockinfo": stockinfo})
-    except models.StockInfo.DoesNotExist:
-        pass
+    template_name = "virtualpools/edit.html"
 
 
 def virtualPoolDeleteView(request, pk):
