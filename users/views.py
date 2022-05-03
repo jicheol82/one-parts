@@ -8,7 +8,7 @@ from users.models import User
 # 본인만 가능
 class AccountView(OnlyForMember, UpdateView):
     model = User
-    template_name = "users/update-profile.html"
+    template_name = "users/update-profile_test.html"
     login_url = reverse_lazy("core:login")
     fields = (
         "username",
@@ -40,3 +40,7 @@ class UpdatePasswordView(OnlyForMember, SuccessMessageMixin, PasswordChangeView)
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
+
+
+def verify_email(request):
+    pass

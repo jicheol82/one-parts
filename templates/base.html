@@ -28,9 +28,11 @@
         {% endblock content %}
 
     </div>
-    <footer class="container border-t border-gray-400 font-medium text-gray-500 text-center">
+    <footer class="container py-4 border-t border-gray-400 font-medium text-gray-500 text-center">
         {% include "partials/footer.html" %}
     </footer>
+    {% block script %}
+    {% endblock script %}
 </body>
 
 </html>

@@ -74,3 +74,14 @@ def complete_verification(request, opt, key):
         pass
     user.save()
     return redirect(reverse("core:home"))
+
+
+def service_exp(request, service):
+    if service == "virtualpool":
+        return render(request, "home/virtualpool.html")
+    elif service == "partsmarket":
+        return render(request, "home/partsmarket.html")
+    elif service == "community":
+        return render(request, "home/community.html")
+    else:
+        return None

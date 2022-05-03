@@ -13,4 +13,5 @@ urlpatterns = [
         views.complete_verification,
         name="complete_verification",
     ),
+    path("service/<str:service>", views.service_exp),
 ]
