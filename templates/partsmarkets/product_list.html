@@ -19,6 +19,7 @@ Parts Market
 {% endblock search-form %}
 
 {% block content %}
+{%if object_list.all%}
 <div class="flex flex-wrap">
     {% for product in object_list %}
     {% include 'mixins/product_card.html' with product=product %}
@@ -26,5 +27,7 @@ Parts Market
 </div>
 
 {% include 'mixins/pagination.html' with page_obj=page_obj %}
-
+{%else%}
+{% include 'partials/no_result.html' %}
+{%endif%}
 {% endblock content %}
