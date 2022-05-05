@@ -1,6 +1,53 @@
-<form method="POST">
-    {% csrf_token %}
-    {{stock_form.as_p}}
-    {{stockinfo_form.as_p}}
-    <button>submit</button>
-</form>
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block page_name %}
+Register
+{% endblock page_name %}
+
+
+{% block content %}
+<div class="w-1/2 mx-auto my-4">
+    <div class="flex justify-end">
+        <button class="p-2 border border-red-500 rounded-lg" onclick="add_manufac()">Add Manufacturer</button>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{stock_form.as_p}}
+        {{stockinfo_form.as_p}}
+        <button class="btn-link mt-2">submit</button>
+    </form>
+</div>
+<script>
+    function add_manufac() {
+        var manufac = prompt("Add a new menufacturer")
+        if (manufac !== null) {
+            console.log(manufac)
+            if (manufac === "") {
+                return alert("Please input the name")
+            }
+            const data = { name: manufac }
+            fetch("{% url 'virtualpools:addManuf' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=UTF-8', },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    if (response.status !== 200) {
+                        return alert('이미 존재하는 이름일 수 있습니다.')
+                    }
+                    response.json()
+                })
+                .then((data) => {
+                    var target = document.getElementById('id_maker');
+                    var opt = document.createElement("option");
+                    opt.value = data['pk'];
+                    opt.innerHTML = data['name'];
+                    target.appendChild(opt);
+                })
+                .catch(function (err) {
+                    console.log('Error : ', err);
+                })
+        }
+    }
+</script>
+{% endblock content %}

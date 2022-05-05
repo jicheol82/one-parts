@@ -10,6 +10,9 @@ class OfficialMakerName(TimeStampedModel):
 
     name = models.CharField(_("official company name"), max_length=30, unique=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 # 옛날 회사명
 class OldMakerName(TimeStampedModel):
@@ -42,7 +45,6 @@ class Stock(TimeStampedModel):
         total = 0
         for i in stockinfo_objs:
             total += i.num_stock
-        print("total_stock : ", total)
         return total
 
     def owner_info(self):
@@ -50,7 +52,6 @@ class Stock(TimeStampedModel):
         owner_list = []
         for i in stockinfo_objs:
             owner_list.append(i)
-        print("owner_info")
         return owner_list
 
 

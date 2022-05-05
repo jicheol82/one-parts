@@ -6,7 +6,8 @@ app_name = "virtualpools"
 urlpatterns = [
     path("", views.VirtualPoolView.as_view(), name="virtualpool"),
     path("<int:pk>/", views.virtualpoolDetailView, name="detail"),
-    path("register", views.virtualPoolCreateView, name="create"),
+    path("register/", views.virtualPoolCreateView, name="create"),
+    path("addmanufacturer/", views.addManufacturer, name="addManuf"),
     path("<int:pk>/edit", views.VirutalPoolEditView.as_view(), name="edit"),
     path("<int:pk>/delete", views.virtualPoolDeleteView, name="delete"),
 ]

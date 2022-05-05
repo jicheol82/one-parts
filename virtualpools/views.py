@@ -1,10 +1,13 @@
+import json
 from urllib.request import HTTPRedirectHandler
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.db.models import Q
+from django.db import IntegrityError
 from django.contrib import messages
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from core.mixins import OnlyForMember, OnlyForVerifiedMember
 from . import models, forms
@@ -123,3 +126,19 @@ def virtualPoolDeleteView(request, pk):
         return redirect("virtualpools:virtualpool")
     except models.StockInfo.DoesNotExist:
         return redirect("virtualpools:virtualpool")
+
+
+@csrf_exempt
+def addManufacturer(request):
+    if request.method == "POST":
+        bodydata = request.body.decode("utf-8")
+        bodyjson = json.loads(bodydata)
+        name = bodyjson["name"]
+        context = {}
+        try:
+            new_manu = models.OfficialMakerName.objects.create(name=name)
+            context["pk"] = new_manu.pk
+            context["name"] = new_manu.name
+            return JsonResponse(context, content_type="application/json")
+        except IntegrityError:
+            return

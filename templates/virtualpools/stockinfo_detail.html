@@ -13,45 +13,65 @@ Stock Detail
         </form>
     </div>
     <div class="w-1/2 flex justify-end">
-        <a href="{%url 'virtualpools:create'%}" class="h-full p-3 rounded-lg border border-blue-400 ">Register Part</a>
+        <a href="{%url 'virtualpools:create'%}" class="h-full p-2 rounded-lg border border-blue-400 ">Register Part</a>
     </div>
 </div>
 {% endblock search-form %}
 
 {% block content %}
-
-<div class="container flex w-2/3 h-75vh">
-    <div class="flex flex-col items-center justify-start w-1/3 p-4 font-bold">
-        <span>Manufacturer</span>
-        <span>Product</span>
-        <span>Model</span>
-        <span>Use Place</span>
-        <span>New Part</span>
-        <span>Number of My Stock</span>
-        <span>Available Stocks</span>
-        <span>Owner Info</span>
-    </div>
-    <div class="flex flex-col justify-start w-2/3 p-4">
-        <span class="truncate">{{stockinfo.my_stock.maker}}</span>
-        <span class="truncate">{{stockinfo.my_stock.name}}</span>
-        <span class="truncate">{{stockinfo.my_stock.model_name}}</span>
-        <span class="truncate">{{stockinfo.place}}</span>
-        <span class="truncate">{{stockinfo.is_new}}</span>
-        <span class="truncate">{{stockinfo.num_stock}}</span>
-        <span class="truncate">{{stockinfo.my_stock.total_stock}}</span>
-        {% for a in stockinfo.my_stock.owner_info %}
-        <span class="truncate">{{a.contact_person}}</span>
-        <span class="truncate">{{a.contact_info}}</span>
-        {% endfor %}
-        <!-- <span class="truncate">{{stockinfo.my_stock.total_stock}}</span> 
-        {% for a in stockinfo.my_stock.owner_info %}
-        <span class="truncate">{{a}}</span>
-        {% endfor %}-->
-    </div>
-</div>
 <div>
-    <a href="{% url 'virtualpools:edit' stockinfo.pk%}">Edit</a>
-    <a href="{% url 'virtualpools:delete' stockinfo.pk%}">Delete</a>
+    <table class="tbl-stock">
+        <tr>
+            <th>Manufacturer</th>
+            <td>{{stockinfo.my_stock.maker}}</td>
+        </tr>
+        <tr>
+            <th>Product</th>
+            <td>{{stockinfo.my_stock.name}}</td>
+        </tr>
+        <tr>
+            <th>Model</th>
+            <td>{{stockinfo.my_stock.model_name}}</td>
+        </tr>
+        <tr>
+            <th>Where to use</th>
+            <td>{{stockinfo.place}}</td>
+        </tr>
+        <tr>
+            <th>New part</th>
+            <td>{{stockinfo.is_new}}</td>
+        </tr>
+        <tr>
+            <th>Number of My Stock</th>
+            <td>{{stockinfo.num_stock}}</td>
+        </tr>
+        <tr>
+            <th>Available Stocks</th>
+            <td>{{stockinfo.my_stock.total_stock}}</td>
+        </tr>
+        <tr>
+            <th>Owner Info</th>
+            <td>
+                {% for a in stockinfo.my_stock.owner_info %}
+                <div class="sm:flex sm:justify-between">
+                    <p class="truncate">{{a.contact_person}}</p>
+                    <p class="truncate">{{a.contact_info}}</p>
+                </div>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
 </div>
-
+<div class="flex flex-col mx-auto w-1/4 text-center">
+    <a class="border border-blue-600 rounded p-4 my-2" href="{% url 'virtualpools:edit' stockinfo.pk%}">Edit</a>
+    <a class="border border-red-600 rounded p-4 my-2" href="javascript:delete_stock({{stockinfo.pk}})">Delete</a>
+</div>
+<script>
+    function delete_stock(pk) {
+        if (confirm("Are you sure to delete this item?") == false) {
+            return false;
+        }
+        window.location.href = "{% url 'virtualpools:delete' stockinfo.pk %}";
+    }
+</script>
 {% endblock content %}
