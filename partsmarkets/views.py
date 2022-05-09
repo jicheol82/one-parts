@@ -24,6 +24,8 @@ class PartsMarketView(ListView):
                 | Q(maker__name__contains=search)
                 | Q(model_name__contains=search)
             )
+        else:
+            queryset = queryset.filter(on_sale=True)
         return queryset
 
     def get_context_data(self, **kwargs):

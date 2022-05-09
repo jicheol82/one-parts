@@ -1,10 +1,22 @@
-<span class="truncate">{{product.name}}</span>
-<span class="truncate">{{product.maker.name}}</span>
-<span class="truncate">{{product.model_name}}</span>
-<span class="truncate">{{product.spec}}</span>
-<span class="truncate">{{product.is_new}}</span>
-<form method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>submit</button>
-</form>
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block page_name %}
+Edit
+{% endblock page_name %}
+
+{% block content %}
+<div class="w-1/2 mx-auto my-4">
+
+    <p class="text-2xl text-center">{{product.name}}</p>
+    <p class="text-1xl text-center">{{product.model_name}}</p>
+    <p class="text-lg text-right">{{product.maker.name}}</p>
+    <p class="text-lg">Specification : {{product.spec}}</p>
+    <p class="text-lg">{% if product.is_new %} Unused {%else%} used {%endif%}</p>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn-link mt-2">submit</button>
+    </form>
+</div>
+
+{% endblock content %}

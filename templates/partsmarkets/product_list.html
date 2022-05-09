@@ -13,6 +13,10 @@ Parts Market
         </form>
     </div>
     <div class="w-1/2 flex justify-end">
+        {%if user.is_authenticated%}
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdlRDbKeVZq3_i--Zn-EbFmuXompGDR_j7-coQrCRGtrpYlPQ/viewform"
+            target="_blank" class="h-full p-3 rounded-lg border border-blue-400 ">상품의뢰</a>
+        {%endif%}
         <a href="{%url 'partsmarkets:mylist'%}" class="h-full p-3 rounded-lg border border-blue-400 ">My Product</a>
     </div>
 </div>

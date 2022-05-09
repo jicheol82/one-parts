@@ -140,5 +140,6 @@ def addManufacturer(request):
             context["pk"] = new_manu.pk
             context["name"] = new_manu.name
             return JsonResponse(context, content_type="application/json")
-        except IntegrityError:
+        except IntegrityError as e:
+            print("error :", e)
             return
