@@ -47,10 +47,10 @@ class SignUpForm(forms.Form):
     username = forms.CharField(
         label=_("ID"), widget=forms.TextInput(attrs={"placeholder": _("Username")})
     )
-    nickname = forms.CharField(
-        label=_("nickname"),
-        widget=forms.TextInput(attrs={"placeholder": _("Nickname")}),
-    )
+    # nickname = forms.CharField(
+    #     label=_("nickname"),
+    #     widget=forms.TextInput(attrs={"placeholder": _("Nickname")}),
+    # )
     password = forms.CharField(
         label=_("Password"),
         widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
@@ -68,14 +68,14 @@ class SignUpForm(forms.Form):
         except User.DoesNotExist:
             return username
 
-    def clean_nickname(self):
-        nickname = self.cleaned_data.get("nickname")
-        try:
-            User.objects.get(nickname=nickname)
-            raise forms.ValidationError("Nick name already exists")
-            # self.add_error("nickname", "nickname does already exist")
-        except User.DoesNotExist:
-            return nickname
+    # def clean_nickname(self):
+    #     nickname = self.cleaned_data.get("nickname")
+    #     try:
+    #         User.objects.get(nickname=nickname)
+    #         raise forms.ValidationError("Nick name already exists")
+    #         # self.add_error("nickname", "nickname does already exist")
+    #     except User.DoesNotExist:
+    #         return nickname
 
     def clean_password1(self):
         password = self.cleaned_data.get("password")
@@ -87,7 +87,7 @@ class SignUpForm(forms.Form):
 
     def save(self):
         username = self.cleaned_data.get("username")
-        nickname = self.cleaned_data.get("nickname")
+        # nickname = self.cleaned_data.get("nickname")
         password = self.cleaned_data.get("password")
-        user = User.objects.create_user(username, nickname=nickname, password=password)
+        user = User.objects.create_user(username, password=password)
         user.save()

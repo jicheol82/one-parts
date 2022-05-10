@@ -34,7 +34,7 @@ Register
                     if (response.status !== 200) {
                         return alert('이미 존재하는 이름일 수 있습니다.')
                     }
-                    response.json()
+                    return response.json()
                 })
                 .then((data) => {
                     var target = document.getElementById('id_maker');

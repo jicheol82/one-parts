@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block page_name %}
+Write Feed
+{% endblock page_name %}
+
+{% block search-form %}
+<div class="flex items-center">
+    <div class="w-1/2">
+        <form class="p-3 w-2/5" action="{%url 'communities:feed'%}" method="get">
+            <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
+                placeholder="Search in Community" value={{input}}>
+        </form>
+    </div>
+    <div class="w-1/2 flex justify-end">
+        <a href="{%url 'communities:write'%}" class="h-full p-2 rounded-lg border border-blue-400 ">Write</a>
+    </div>
+</div>
+{% endblock search-form %}
+
+{% block content %}
+<div class="w-2/3 mx-auto">
+
+    <form method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        <label>Writer</label>
+        <input class="mb-3" type="text" value="{{user}}" readonly>
+        <input type="hidden" value="{{user.pk}}" name="writer" id="id_writer">
+        <label>Content</label>
+        <textarea class="w-full h-25vh mb-3 border border-gray-600" required id="id_content"
+            name="content">{{feed.content}}</textarea>
+        <label>Attachment</label>
+        <input class="mb-3" type="file" id="id_attach" name="attach">
+        <button class="btn-link">submmit</button>
+    </form>
+</div>
+{% endblock content %}

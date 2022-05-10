@@ -142,4 +142,4 @@ def addManufacturer(request):
             return JsonResponse(context, content_type="application/json")
         except IntegrityError as e:
             print("error :", e)
-            return
+            return JsonResponse(context, content_type="application/json")

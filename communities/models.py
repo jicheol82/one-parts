@@ -1,8 +1,9 @@
 from django.db import models
-from core.models import TimeStampedModel
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from core.models import TimeStampedModel
 
-DEFAULT_PK = 1
+DEFAULT_PK = 45
 
 
 class Feed(TimeStampedModel):
@@ -10,8 +11,8 @@ class Feed(TimeStampedModel):
 
     writer = models.ForeignKey(
         "users.User",
-        on_delete=models.SET_DEFAULT,
-        default=DEFAULT_PK,
+        on_delete=models.CASCADE,
+        # default=DEFAULT_PK,
         verbose_name=_("writer"),
     )
     content = models.TextField(_("content"))
@@ -28,6 +29,10 @@ class Feed(TimeStampedModel):
 
     def __str__(self):
         return f"{self.writer}-{self.content[:40]}"
+
+    def get_absolute_url(self):
+
+        return reverse("communities:feed_detail", kwargs={"pk": self.pk})
 
 
 class Reply(TimeStampedModel):

@@ -1,26 +1,73 @@
-{% extends 'base.html' %}
+<div class="mt-2">
 
-{% block page_name %}
-Community
-{% endblock page_name %}
-
-{% block search-form %}
-<div>
-    <form class="p-3 w-2/5" method="get">
-        <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
-            placeholder="Search in Community" value={{input}}>
+    <table id="reply_list">
+        {% for reply in replies %}
+        <tr id="id_{{reply.pk}}">
+            <td class="px-2">{{reply.writer}}</td>
+            <td class="pl-4">{{reply.content}}</td>
+            <td class="pl-4">
+                {% ifequal user.username reply.writer.username %}
+                <a href="javascript:deleteReply({{feed.pk}}, {{reply.pk}})" class="p-2">ⓧ</a>
+                {% endifequal %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="mt-4">
+    <form class="flex flex-between" method="POST" action="javascript:createReply()">
+        {%csrf_token%}
+        <input class="w-full" type="text" id="reply">
+        <button class="ml-2 p-2 border border-red-500">save</button>
     </form>
 </div>
-{% endblock search-form %}
+<script>
+    function createReply() {
+        var text = document.getElementById("reply").value;
+        if (text === "") {
+            return alert("please input text")
+        }
+        const data = { reply: text };
+        fetch("{% url 'communities:reply_create' feed.pk %}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8', },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (response.status != 200) {
+                    return alert("Failed to save your reply");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                document.getElementById("reply").value = null
+                var target = document.getElementById("reply_list");
+                var newRow = target.insertRow(-1);
+                newRow.setAttribute("id", "id_" + data['pk']);
+                newRow.innerHTML = "<td class='px-2'>" + data['writer'] + "</td><td class='pl-4'>" + data['content'] + "</td><td class='pl-4'><a href='javascript:deleteReply({{feed.pk}}," + data['pk'] + ")' class='p-2'>ⓧ</a></td >"
+            })
+            .catch(function (err) {
+                console.log('Error: ', err)
+            })
 
-{% block content %}
-<div class="flex flex-wrap">
+    }
+    function deleteReply(pk, r_pk) {
+        if (confirm("Do you want to delete it?")) {
+            fetch("/community/" + pk + "/reply/" + r_pk)
+                .then((response) => {
+                    if (response.status != 200) {
+                        return alert("Failed to delete");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    document.getElementById("id_" + r_pk).remove()
+                })
+                .catch(function (err) {
+                    console.log('Error: ', err)
+                })
+        }
+    }
 
-    {% for reply in obj_list %}
-    {{reply.writer}}/{{reply.content}}
-    {% endfor %}
-</div>
-
-{% include 'mixins/pagination.html' with page_obj=page_obj %}
-
-{% endblock content %}
+</script>

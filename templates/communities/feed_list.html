@@ -5,20 +5,61 @@ Community
 {% endblock page_name %}
 
 {% block search-form %}
-<div>
-    <form class="p-3 w-2/5" method="get">
-        <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
-            placeholder="Search in Community" value={{input}}>
-    </form>
+<div class="flex items-center">
+    <div class="w-1/2">
+        <form class="p-3 w-4/5" action="{%url 'communities:feed'%}" method="get">
+            <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
+                placeholder="Search in Community" value={{input}}>
+        </form>
+    </div>
+    <div class="w-1/2 flex justify-end">
+        <a href="{%url 'communities:write'%}" class="h-full p-2 rounded-lg border border-blue-400 ">Write</a>
+    </div>
 </div>
 {% endblock search-form %}
 
 {% block content %}
-<div class="flex flex-wrap">
-    {% for feed in object_list %}
-    <a href="{%url 'communities:reply' feed.pk%}">{{feed}} / {{feed.count_reply}}</a>
-    {% endfor %}
-</div>
+{%if object_list.all%}
+<table class="container">
+    <thead>
+        <tr class="w-full border-b">
+            <th class="w-1/12">
+                <p>WRITER</p>
+            </th>
+            <th class="w-4/12">
+                <p>CONTENTS</p>
+            </th>
+            <th class="w-4/12">
+                <p>Num of Reply</p>
+            </th>
+            <th class="w-3/12">
+                <p>Date</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for feed in object_list %}
+        <tr class="cursor-pointer border-b" onClick="location.href='/community/{{feed.pk}}'">
+            <td class="text-center">
+                <p>{{feed.writer}}</p>
+            </td>
+            <td class="max-w-3xl">
+                <p class="truncate">{{feed.content}}</p>
+            </td>
+            <td class="px-1 py-1">
+                <p>{{feed.count_reply}}</p>
+            </td>
+            <td class="text-center">
+                <p>{{feed.created}}</p>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{%else%}
+{% include 'partials/no_result.html' %}
+{%endif%}
+
 
 {% include 'mixins/pagination.html' with page_obj=page_obj %}
 

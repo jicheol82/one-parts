@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load file_split%}
+{% block page_name %}
+Community
+{% endblock page_name %}
+
+{% block search-form %}
+<div class="flex items-center">
+    <div class="w-1/2">
+        <form class="p-3 w-4/5" action="{%url 'communities:feed'%}" method="get">
+            <input class="search-box placeholder-gray-600" type="text" name="search" id="search"
+                placeholder="Search in Community" value={{input}}>
+        </form>
+    </div>
+</div>
+{% endblock search-form %}
+
+{% block content %}
+<div class="w-2/3 mx-auto">
+    <p>
+        Writer : {{feed.writer}}
+    </p>
+    <p>
+        created : {{feed.created}}
+    </p>
+    <div class="mt-2">
+        <textarea class="p-2 w-full h-50vh border border-gray-500" readonly>{{feed.content}}</textarea>
+    </div>
+    <div class="p-2 border border-gray-500">
+        Attachment<br>
+        {%if feed.attach%}
+        <a href="{{feed.attach.url}}">{{feed.attach|split:"/"}}</a>
+        {%else%}
+        No files
+        {%endif%}
+    </div>
+    {% include 'communities/reply_list.html' with replies=replies%}
+</div>
+{% if user == feed.writer %}
+<div class="flex flex-col mx-auto w-1/4 text-center">
+    <a class="border border-blue-600 rounded p-4 my-2" href="{%url 'communities:edit' feed.pk%}">Edit</a>
+    <a class="border border-red-600 rounded p-4 my-2" href="{%url 'communities:delete' feed.pk%}">Delete</a>
+</div>
+{% endif %}
+{% endblock content %}
