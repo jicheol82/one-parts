@@ -133,7 +133,7 @@ def addManufacturer(request):
     if request.method == "POST":
         bodydata = request.body.decode("utf-8")
         bodyjson = json.loads(bodydata)
-        name = bodyjson["name"]
+        name = bodyjson["name"].upper()
         context = {}
         try:
             new_manu = models.OfficialMakerName.objects.create(name=name)

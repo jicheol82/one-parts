@@ -102,7 +102,6 @@ def replyCreateView(request, pk):
             context["pk"] = new_reply.pk
             context["writer"] = new_reply.writer.username
             context["content"] = new_reply.content
-            print(context)
             return JsonResponse(context, content_type="application/json")
         except IntegrityError:
             return
@@ -112,9 +111,7 @@ def replyDeleteView(request, pk, r_pk):
     user = request.user
     context = {}
     try:
-        print("user.pk", user.pk)
         reply = Reply.objects.get(pk=r_pk)
-        print("reply.pk", reply.pk)
         if reply.writer.pk != user.pk:
             context["result"] = "Can't delete"
 

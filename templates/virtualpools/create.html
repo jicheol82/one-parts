@@ -16,10 +16,14 @@ Register
         {{stockinfo_form.as_p}}
         <button class="btn-link mt-2">submit</button>
     </form>
+    <div class="my-2 p-3 rounded-lg border border-gray-500 bg-gray-500 w-full text-center">
+        <a href="{% url 'virtualpools:virtualpool' %}">Back</a>
+    </div>
 </div>
 <script>
     function add_manufac() {
         var manufac = prompt("Add a new menufacturer")
+        manufac = manufac.trim()
         if (manufac !== null) {
             if (manufac === "") {
                 return alert("Please input the name")
@@ -32,16 +36,20 @@ Register
             })
                 .then((response) => {
                     if (response.status !== 200) {
-                        return alert('이미 존재하는 이름일 수 있습니다.')
+                        return alert('Can\'t register the item')
                     }
                     return response.json()
                 })
                 .then((data) => {
-                    var target = document.getElementById('id_maker');
-                    var opt = document.createElement("option");
-                    opt.value = data['pk'];
-                    opt.innerHTML = data['name'];
-                    target.appendChild(opt);
+                    if (data['pk'] != null) {
+                        var target = document.getElementById('id_maker');
+                        var opt = document.createElement("option");
+                        opt.value = data['pk'];
+                        opt.innerHTML = data['name'];
+                        target.appendChild(opt);
+                    } else {
+                        alert("Item is not registred")
+                    }
                 })
                 .catch(function (err) {
                     console.log('Error : ', err);

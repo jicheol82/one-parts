@@ -15,6 +15,9 @@ Edit
         {{form.as_p}}
         <button class="btn-link mt-2">submit</button>
     </form>
+    <div class="text-center mt-2">
+        <button class="w-full py-3 border border-gray-500 rounded-lg bg-gray-500 text-white"
+            onClick="location.href='{% url 'virtualpools:detail' stockinfo.pk %}'">Back</button>
+    </div>
 </div>
-
 {% endblock content %}

@@ -52,9 +52,12 @@ home
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
     <div class="flex flex-col justify-center items-center w-1/2">
+        {% if user.is_anonymous %}
         <p>Let's join and explore ONE-PARTS</p>
-        <button href="#" class="h-12 w-1/2 my-4 rounded-xl border border-pink-600 bg-white text-bold text-2xl">Sign
+        <button onClick="location.href='{%url 'core:signup'%}';"
+            class="h-12 w-1/2 my-4 rounded-xl border border-pink-600 bg-white text-bold text-2xl">Sign
             Up</button>
+        {% endif %}
         <p class="mt-8">Don't hesitate to ask questions</p>
         <a href="mailto:cs@one-parts.co.kr"
             class="h-12 w-1/2 my-4 rounded-xl border border-pink-600 bg-white text-center text-bold text-2xl">Contact</a>
