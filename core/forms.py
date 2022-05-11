@@ -1,6 +1,10 @@
+from cProfile import label
+from enum import unique
 from django import forms
+from django.contrib.auth.forms import UsernameField
+from django.contrib.auth import password_validation, validators
 from django.utils.translation import gettext_lazy as _
-from users.models import User
+from users.models import User, Domain
 
 
 class LoginForm(forms.Form):
@@ -31,63 +35,49 @@ class LoginForm(forms.Form):
             self.add_error("username", forms.ValidationError(_("ID does not exist")))
 
 
-class SignUpForm(forms.Form):
-    """
-    # class Meta는 UserCreationForm외에도 사용가능하다
+class SignUpForm(forms.ModelForm):
     class Meta:
-        model = models.User
-        fields = ("first_name", "last_name", "email")
-         widgets = {
-            "first_name": forms.TextInput(attrs={"placeholder": "First Name"}),
-            "last_name": forms.TextInput(attrs={"placeholder": "Last Name"}),
-            "email": forms.EmailInput(attrs={"placeholder": "Email Name"}),
-        }
-    """
+        model = User
 
-    username = forms.CharField(
-        label=_("ID"), widget=forms.TextInput(attrs={"placeholder": _("Username")})
-    )
-    # nickname = forms.CharField(
-    #     label=_("nickname"),
-    #     widget=forms.TextInput(attrs={"placeholder": _("Nickname")}),
-    # )
+        fields = (
+            "username",
+            "email",
+            "password",
+        )
+
     password = forms.CharField(
         label=_("Password"),
-        widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
+        validators=[password_validation.validate_password],
+        widget=forms.PasswordInput(),
     )
+
     password1 = forms.CharField(
         label=_("Confirm Password"),
-        widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password"}),
+        widget=forms.PasswordInput(),
     )
 
-    def clean_username(self):
-        username = self.cleaned_data.get("username")
+    def clean_email(self):
+        # 메일 도메인을 확인해서 등록회사 여부를 확인한다
+        email = self.cleaned_data.get("email")
+        domain = email.split("@")[1]
         try:
-            User.objects.get(username=username)
-            raise forms.ValidationError("User already exists with that email")
-        except User.DoesNotExist:
-            return username
-
-    # def clean_nickname(self):
-    #     nickname = self.cleaned_data.get("nickname")
-    #     try:
-    #         User.objects.get(nickname=nickname)
-    #         raise forms.ValidationError("Nick name already exists")
-    #         # self.add_error("nickname", "nickname does already exist")
-    #     except User.DoesNotExist:
-    #         return nickname
+            Domain.objects.get(name=domain)
+            return email
+        except Domain.DoesNotExist:
+            raise forms.ValidationError(
+                "Not registered Domain. Please contact Administrator"
+            )
 
     def clean_password1(self):
         password = self.cleaned_data.get("password")
         password1 = self.cleaned_data.get("password1")
-        if password == password1:
-            return password
-        else:
+        if password != password1:
             raise forms.ValidationError("Password confirmation does not match")
+        else:
+            return password
 
-    def save(self):
-        username = self.cleaned_data.get("username")
-        # nickname = self.cleaned_data.get("nickname")
+    def save(self, *args, **kwargs):
+        user = super().save(commit=False)
         password = self.cleaned_data.get("password")
-        user = User.objects.create_user(username, password=password)
+        user.set_password(password)
         user.save()

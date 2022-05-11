@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView
+from django.http import JsonResponse
+from django.utils.translation import gettext_lazy as _
 from core.forms import *
 from core.mixins import OnlyForGuest
 from users.models import User
@@ -51,28 +52,20 @@ class SignUpView(OnlyForGuest, FormView):
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
         user = authenticate(self.request, username=username, password=password)
-        user.veryfy_email()
+        messages.success(self.request, "Success to join, please verify your email.")
+        user.verify_email()
         return super().form_valid(form)
 
-    # initial = {'필드명':"필드값",}
 
-
-def complete_verification(request, opt, key):
+def complete_verification(request, key):
     try:
-        if opt == "user":
-            user = User.objects.get(user_secret=key)
-            user.user_verified = True
-            user.user_secret = ""
-        elif opt == "company":
-            user = User.objects.get(company_secret=key)
-            user.company_verified = True
-            user.company_secret = ""
-        else:
-            print("abnormal access")
+        user = User.objects.get(token=key)
+        user.is_verified = True
+        user.token = ""
+        user.save()
+        messages.success(request, "You are verified! Please log in")
     except User.DoesNotExist:
-        # to do : error message
-        pass
-    user.save()
+        messages.error(request, "You are not verified safely")
     return redirect(reverse("core:home"))
 
 

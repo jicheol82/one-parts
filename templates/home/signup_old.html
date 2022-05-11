@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_name %}
+Sign up
+{% endblock page_name %}
+
+
+{% block content %}
+<div class="md:w-2/5 mx-auto my-32 text-center border border-gray-500 p-4">
+    {% include 'mixins/auth/auth_form.html' with form=form cta="Sign up" %}
+</div>
+{% endblock content %}

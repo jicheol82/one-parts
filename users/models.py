@@ -53,6 +53,7 @@ class Domain(TimeStampedModel):
 
 # 사용자 모델 생성하기
 class User(AbstractUser):
+    email = models.EmailField(_("email address"), blank=True, unique=True)
     profile_img = models.ImageField(_("picture"), upload_to="profile_img", blank=True)
     company = models.ForeignKey("Company", on_delete=models.SET_NULL, null=True)
     branch = models.ForeignKey("Branch", on_delete=models.SET_NULL, null=True)
@@ -89,13 +90,14 @@ class User(AbstractUser):
             Company.objects.create(name=company)
             return f"{company} is registered!"
 
-    def veryfy_email(self):
+    def verify_email(self):
         key = uuid.uuid4().hex[:8]
         self.token = key
+        print("key :", key)
         html_message = render_to_string("emails/verify_user.html", {"secret": key})
         try:
             send_mail(
-                "Verify One-Parts Account",
+                _("Please Complete Email Verification"),
                 html_message,
                 from_email=settings.EMAIL_FROM,
                 recipient_list=[self.email],
@@ -103,8 +105,8 @@ class User(AbstractUser):
                 html_message=html_message,
             )
             self.save()
-        except:
-            # 메일발송 실패 메시지 띄우기
+        except Exception as e:
+            print("Exception happend : ", e)
             pass
 
     def get_absolute_url(self):
