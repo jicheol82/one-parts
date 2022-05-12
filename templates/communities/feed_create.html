@@ -20,15 +20,13 @@ Write Feed
 
 {% block content %}
 <div class="w-2/3 mx-auto">
-
     <form method="POST" enctype="multipart/form-data">
         {%csrf_token%}
         <label>Writer</label>
         <input class="mb-3" type="text" value="{{user}}" readonly>
         <input type="hidden" value="{{user.pk}}" name="writer" id="id_writer">
-        <label>Content</label>
-        <textarea class="w-full h-25vh mb-3 border border-gray-600" required id="id_content"
-            name="content">{{feed.content}}</textarea>
+        {{form.content}}
+
         <label>Attachment</label>
         <input class="mb-3" type="file" id="id_attach" name="attach">
         <button class="btn-link">submmit</button>

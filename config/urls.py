@@ -24,6 +24,7 @@ urlpatterns = [
     path("virtualpool/", include("virtualpools.urls", namespace="virtualpools")),
     path("partsmarket/", include("partsmarkets.urls", namespace="partsmarkets")),
     path("community/", include("communities.urls", namespace="communities")),
+    path("summernote/", include("django_summernote.urls")),
     path("admin/", admin.site.urls),
 ]
 

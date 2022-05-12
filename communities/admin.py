@@ -1,9 +1,11 @@
 from django.contrib import admin
+from django_summernote.admin import SummernoteModelAdmin
 from .models import *
 
 
 @admin.register(Feed)
-class FeedAdmin(admin.ModelAdmin):
+class FeedAdmin(SummernoteModelAdmin):
+    summernote_fields = ("content",)
     search_fields = (
         "writer",
         "content",

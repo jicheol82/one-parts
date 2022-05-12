@@ -8,6 +8,7 @@ django = "==3.2.12"
 django-seed = "*"
 psycopg2 = "*"
 django-dotenv = "*"
+django-summernote = "*"
 
 [dev-packages]
 black = "*"

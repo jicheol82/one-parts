@@ -1,13 +1,14 @@
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
 from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
 from psycopg2 import IntegrityError
 from core.mixins import OnlyForMember
 from .models import *
+from .forms import FeedWriteForm
 
 # Create your views here.
 class FeedListView(ListView):
@@ -47,6 +48,22 @@ class FeedDetailView(OnlyForMember, DetailView):
         replies = Reply.objects.filter(original_feed=pk)
         context["replies"] = replies
         return context
+
+
+def feed_write(request):
+    context = {}
+    if request.method == "GET":
+        write_form = FeedWriteForm()
+        context["form"] = write_form
+        return render(request, "communities/feed_create.html", context)
+    elif request.method == "POST":
+        write_form = FeedWriteForm(request.POST)
+        return redirect("communities:feed")
+
+
+class FeedWriteView_S(FormView):
+    form_class = FeedWriteForm
+    template_name = "communities/feed_create.html"
 
 
 class FeedCreateView(OnlyForMember, CreateView):
