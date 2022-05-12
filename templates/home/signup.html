@@ -10,9 +10,6 @@ Sign up
     <form method="POST" class="w-full" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <!-- 이메일 인증 결과 값 -->
-        <input type="hidden" id="verification" name="verified" value="False">
-
         {% if form.non_field_errors %}
         {% for error in form.non_field_errors %}
         <span class="text-red-700 font-medium text-sm">{{error}}</span>

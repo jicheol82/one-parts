@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block page_name %}
+Update Profile
+{% endblock page_name %}
+
+
+{% block content %}
+<div class="md:w-2/5 mx-auto my-32 text-center border border-gray-500 p-4">
+    <form method="POST" class="w-full" enctype="multipart/form-data" onSubmit="return update_profile(this)">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <span class="text-red-700 font-medium text-sm">{{error}}</span>
+        {% endfor %}
+        {% endif %}
+
+        <!-- Username 입력 -->
+        <div class="input w-full {% if form.username.errors %}has_error{% endif %}">
+            <div class="flex items-center text-left">
+                <div class="w-1/3"><span class="align-middle">Username</span></div>
+                <div class="w-2/3"><input type="text" value="{{user.username}}" disabled></div>
+            </div>
+            <div>
+                {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                <span class="text-red-700 font-medium text-sm">{{error}}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <!-- 회사 Email 입력 -->
+        <div class="input w-full {% if form.email.errors %}has_error{% endif %}">
+            <div class="flex items-center text-left">
+                <div class="w-1/3"><span class="align-middle">Company Email</span></div>
+                <div class="w-2/3">{{form.email}} </div>
+            </div>
+            <div>
+                {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                <span class="text-red-700 font-medium text-sm">{{error}}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <button class="btn bg-red-500 text-white" id="id_update" disabled>Update
+            profile</button>
+        <div class="mt-5">
+            <a href="{% url 'users:password' %}" class="text-teal-500 font-medium">Change Password</a>
+        </div>
+    </form>
+    <script>
+        (function () {
+            document.getElementById("id_email").setAttribute("onInput", "enable_button()")
+        })()
+        function enable_button() {
+            document.getElementById("id_update").removeAttribute("disabled")
+        }
+        function update_profile(elem) {
+            var old_email = "{{user.email}}";
+            var new_email = elem.id_email.value;
+            if (old_email === new_email) {
+                alert("Email is same with previous one")
+                return false
+            }
+        }
+    </script>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock script %}

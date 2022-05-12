@@ -1,4 +1,5 @@
 import uuid
+from smtplib import SMTPException
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -91,9 +92,9 @@ class User(AbstractUser):
             return f"{company} is registered!"
 
     def verify_email(self):
-        key = uuid.uuid4().hex[:8]
+        key = uuid.uuid4().hex[:16]
+        self.is_verified = False
         self.token = key
-        print("key :", key)
         html_message = render_to_string("emails/verify_user.html", {"secret": key})
         try:
             send_mail(
@@ -101,13 +102,14 @@ class User(AbstractUser):
                 html_message,
                 from_email=settings.EMAIL_FROM,
                 recipient_list=[self.email],
-                fail_silently=False,
+                fail_silently=True,
                 html_message=html_message,
             )
             self.save()
-        except Exception as e:
+            return True
+        except SMTPException as e:
             print("Exception happend : ", e)
-            pass
+            return False
 
     def get_absolute_url(self):
         return reverse("users:account")

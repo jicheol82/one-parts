@@ -1,26 +1,33 @@
+from gc import get_objects
+from django.shortcuts import redirect
 from django.views.generic import UpdateView
 from django.contrib.auth.views import PasswordChangeView
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from core.mixins import OnlyForMember
 from users.models import User
+from users.forms import AccountForm
 
 # 본인만 가능
-class AccountView(OnlyForMember, UpdateView):
+class AccountUpdateView(OnlyForMember, UpdateView):
     model = User
-    template_name = "users/update-profile_test.html"
+    form_class = AccountForm
+    template_name = "users/account.html"
     login_url = reverse_lazy("core:login")
-    fields = (
-        "username",
-        "email",
-        "company",
-        "branch",
-        "my_equips",
-    )
 
     def get_object(self):
-
         return self.request.user
+
+    def form_valid(self, form):
+        result = self.object.verify_email()
+        if result:
+            form.save()
+            messages.success(self.request, "success")
+        else:
+            messages.error(self.request, "Fail update")
+            return redirect("users:account")
+        return super().form_valid(form)
 
 
 # 본인만 가능
@@ -40,7 +47,3 @@ class UpdatePasswordView(OnlyForMember, SuccessMessageMixin, PasswordChangeView)
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
-
-
-def verify_email(request):
-    pass

@@ -4,6 +4,6 @@ from users import views
 app_name = "users"
 
 urlpatterns = [
-    path("account/", views.AccountView.as_view(), name="account"),
+    path("account/", views.AccountUpdateView.as_view(), name="account"),
     path("update-password", views.UpdatePasswordView.as_view(), name="password"),
 ]

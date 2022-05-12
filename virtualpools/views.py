@@ -1,5 +1,4 @@
 import json
-from urllib.request import HTTPRedirectHandler
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, DetailView, UpdateView
