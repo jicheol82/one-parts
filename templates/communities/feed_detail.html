@@ -24,7 +24,7 @@ Community
         created : {{feed.created}}
     </p>
     <div class="mt-2">
-        <textarea class="p-2 w-full h-50vh border border-gray-500" readonly>{{feed.content}}</textarea>
+        {{feed.content | safe}}
     </div>
     <div class="p-2 border border-gray-500">
         Attachment<br>

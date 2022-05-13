@@ -11,7 +11,9 @@ class FeedWriteForm(forms.ModelForm):
     class Meta:
         model = Feed
         fields = [
+            "writer",
             "content",
+            "attach",
         ]
         widgets = {"content": SummernoteWidget()}
 

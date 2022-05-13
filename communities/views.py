@@ -1,4 +1,5 @@
 import json
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
@@ -64,6 +65,16 @@ def feed_write(request):
 class FeedWriteView_S(FormView):
     form_class = FeedWriteForm
     template_name = "communities/feed_create.html"
+    success_url = reverse_lazy("communities:feed_detail")
+
+    def form_valid(self, form):
+        item = form.save()
+        self.pk = item.pk
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        print(self.pk)
+        return reverse("communities:feed_detail", kwargs={"pk": self.pk})
 
 
 class FeedCreateView(OnlyForMember, CreateView):
@@ -87,20 +98,18 @@ class FeedUpdateView(UpdateView):
 
 def feedDelete(request, pk):
     user = request.user
-    context = {}
     try:
         feed = Feed.objects.get(pk=pk)
         if feed.writer.pk != user.pk:
             messages.success(request, "Can't Deleted")
         else:
-            feed.delete()
+            result = feed.delete()
+            print(result)
             messages.success(request, "Feed Deleted")
     except Feed.DoesNotExist:
         messages.success(request, "It's been deleted already")
     finally:
-        return JsonResponse(
-            context,
-        )
+        return redirect("communities:feed")
 
 
 @csrf_exempt

@@ -44,7 +44,7 @@ Community
                 <p>{{feed.writer}}</p>
             </td>
             <td class="max-w-3xl">
-                <p class="truncate">{{feed.content}}</p>
+                <p class="truncate">{{feed.content | safe}}</p>
             </td>
             <td class="px-1 py-1">
                 <p>{{feed.count_reply}}</p>
