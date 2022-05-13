@@ -105,7 +105,7 @@ else:
             "NAME": os.environ.get("RDS_NAME"),
             "USER": os.environ.get("RDS_USER"),
             "PASSWORD": os.environ.get("RDS_PASSWORD"),
-            "PORT": os.environ.get("PORT"),
+            "PORT": os.environ.get("RDS_PORT"),
         }
     }
 # Password validation
