@@ -9,10 +9,10 @@ django-seed = "*"
 psycopg2 = "*"
 django-dotenv = "*"
 django-summernote = "*"
+awsebcli = "*"
 
 [dev-packages]
 black = "*"
-awsebcli = "*"
 
 [requires]
 python_version = "3.8"

@@ -128,6 +128,7 @@ dmypy.json
 .DS_Store
 uploads/
 product_photos/
+Django-summernote/
 node_modules/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
